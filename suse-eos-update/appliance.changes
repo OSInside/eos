@@ -1,0 +1,24 @@
+-------------------------------------------------------------------
+Tue Nov 21 10:32:27 UTC 2023 - Marcus Schäfer <marcus.schaefer@gmail.com>
+
+- add missing lsof
+
+-------------------------------------------------------------------
+Thu Nov 16 11:09:32 UTC 2023 - Marcus Schäfer <marcus.schaefer@gmail.com>
+
+- add syslog service
+
+-------------------------------------------------------------------
+Thu Nov 16 10:16:48 UTC 2023 - Marcus Schäfer <marcus.schaefer@gmail.com>
+
+- add /etc/os-update.yml
+
+-------------------------------------------------------------------
+Wed Nov 15 11:31:27 UTC 2023 - Marcus Schäfer <marcus.schaefer@gmail.com>
+
+- fix crontab setup
+
+-------------------------------------------------------------------
+Mon Oct 30 13:31:18 UTC 2023 - Marcus Schäfer <marcus.schaefer@gmail.com>
+
+- Delete overlay root tarball, provide data via packages

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- OBS-Profiles: @BUILD_FLAVOR@ -->
+<image schemaversion="7.5" name="EOS-Update-Server" displayname="SUSE Embedded OS Update Server">
+    <description type="system">
+        <author>Automotive Team</author>
+        <contact>marcus.schaefer@suse.com</contact>
+        <specification>A/B Update Server for EOS</specification>
+    </description>
+
+    <profiles>
+        <profile name="ALP-EC2" description="Update Server for EOS ALP"/>
+    </profiles>
+
+    <preferences>
+        <version>1.0.1</version>
+        <packagemanager>zypper</packagemanager>
+        <rpm-excludedocs>true</rpm-excludedocs>
+        <locale>en_US</locale>
+        <keytable>us</keytable>
+        <timezone>Europe/Berlin</timezone>
+        <bootloader-theme>openSUSE</bootloader-theme>
+        <bootsplash-theme>bgrt</bootsplash-theme>
+        <type
+            image="oem"
+            initrd_system="dracut"
+            filesystem="ext4"
+            bootpartition="false"
+            firmware="efi"
+            efipartsize="500"
+            kernelcmdline="console=ttyS0,115200 console=tty0"
+            devicepersistency="by-uuid">
+            <oemconfig>
+                <oem-resize>false</oem-resize>
+            </oemconfig>
+            <bootloader name="grub2" timeout="3"/>
+            <size unit="G">10</size>
+            <machine xen_loader="hvmloader"/>
+        </type>
+    </preferences>
+
+    <users profiles="ALP-EC2">
+        <user
+            password="$1$wYJUgpM5$RXMMeASDc035eX.NbYWFl0"
+            home="/home/ec2-user"
+            name="ec2-user"
+            groups="users,root"/>
+    </users>
+
+    <repository type="rpm-md" >
+        <source path='obsrepositories:/'/>
+    </repository>
+
+    <packages type="image">
+        <package name="xfsprogs"/>
+        <package name="systemd"/>
+        <package name="timezone"/>
+        <package name="shadow"/>
+        <package name="openssh"/>
+        <package name="NetworkManager"/>
+        <package name="growpart"/>
+        <package name="gptfdisk"/>
+        <package name="util-linux"/>
+        <package name="vim"/>
+        <package name="xz"/>
+        <package name="less"/>
+        <package name="grub2"/>
+        <package name="iproute2"/>
+        <package name="libnss_usrfiles2"/>
+        <package name="grub2-x86_64-efi" arch="x86_64"/>
+        <package name="grub2-arm64-efi" arch="aarch64"/>
+        <package name="grub2-i386-pc" arch="x86_64"/>
+        <package name="grub2-x86_64-xen" arch="x86_64"/>
+        <package name="chrony"/>
+        <package name="amazon-ssm-agent"/>
+        <package name="cloud-init"/>
+        <package name="cloud-init-config-suse"/>
+        <package name="openssh-server"/>
+        <package name="openssh-clients"/>
+        <package name="systemd-network"/>
+        <package name="wget"/>
+        <package name="kernel-default"/>
+        <package name="lsof"/>
+        <package name="eos-setup-base"/>
+        <package name="eos-setup-os-update-server"/>
+    </packages>
+
+    <packages type="image" profiles="ALP-EC2">
+        <package name="eos-setup-base-ec2"/>
+    </packages>
+
+    <packages type="bootstrap">
+        <package name="filesystem"/>
+        <package name="glibc-locale-base"/>
+        <package name="ca-certificates"/>
+        <package name="ca-certificates-mozilla"/>
+    </packages>
+</image>
