@@ -1,0 +1,19 @@
+-------------------------------------------------------------------
+Sun Nov 12 10:17:35 UTC 2023 - Marcus Schäfer <marcus.schaefer@gmail.com>
+
+- Update filenames to match profile names 
+
+-------------------------------------------------------------------
+Sun Nov 12 10:00:08 UTC 2023 - Marcus Schäfer <marcus.schaefer@gmail.com>
+
+- named grub config for RPI
+
+-------------------------------------------------------------------
+Fri Nov  3 19:45:56 UTC 2023 - Marcus Schäfer <marcus.schaefer@gmail.com>
+
+- Update bootloader title
+
+-------------------------------------------------------------------
+Wed Oct 18 07:22:44 UTC 2023 - Marcus Schäfer <marcus.schaefer@gmail.com>
+
+- initial version 

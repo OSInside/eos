@@ -1,0 +1,14 @@
+set default=1
+
+serial
+terminal_input serial
+terminal_output serial
+set timeout_style=menu
+set timeout=1
+
+menuentry 'EOS EC2'  --class os --unrestricted {
+	echo	'Loading Linux...'
+	linux	($root)/boot/Image root=$rootdev console=ttyS0 multipath=off net.ifnames=0 memhp_default_state=offline nvme_core.io_timeout=4294967295 nvme_core.admin_timeout=4294967295 8250.nr_uarts=4 dis_ucode_ldr systemd.show_status=1 systemd.unified_cgroup_hierarchy=1
+	echo	'Loading initial ramdisk...'
+	initrd	($root)/boot/initrd
+}
