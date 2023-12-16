@@ -18,6 +18,15 @@ for profile in ${kiwi_profiles//,/ }; do
         # Enable USB boot
         #---------------------------------------
         echo "program_usb_boot_mode=1" >> /boot/efi/config.txt
+
+        #=======================================
+        # Enable DRM VC4 V3D driver
+        #---------------------------------------
+        echo "dtoverlay=vc4-kms-v3d" >> /boot/efi/config.txt
+        echo "max_framebuffers=2" >> /boot/efi/config.txt
+        echo "display_auto_detect=1" >> /boot/efi/config.txt
+        echo "disable_overscan=1" >> /boot/efi/config.txt
+        echo "gpu_mem=128" >> /boot/efi/config.txt
     fi
 done
 
