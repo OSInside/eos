@@ -1,0 +1,35 @@
+#!/bin/bash
+# shellcheck shell=bash
+
+set -e
+
+if [ ! -d binaries ];then
+    echo "run osc getbinaries first..."
+    exit 1
+fi
+
+image=$(echo binaries/*.raw.xz)
+arch=$(echo "${image}" | cut -f2 -d. | cut -f1 -d-)
+dist=$(echo "${image}" | cut -f4 -d. | cut -f3 -d- | sed -e "s@Build@@" | tr '[:upper:]' '[:lower:]')
+desc="$(basename "${image}" | cut -f1 -d.)"-"${dist}"-"${arch}"
+name="${desc}-v$(date +%Y%m%d)"
+
+ec2arch="${arch}"
+if [ "${arch}" == "aarch64" ];then
+    ec2arch=arm64
+fi
+
+ec2uploadimg \
+    --wait-count 5 \
+    -a suse -f ~ms/.ec2/ec2utils.conf \
+    --grub2 \
+    -m "${ec2arch}" \
+    -n "${name}" \
+    --sriov-support \
+    --ena-support \
+    --boot-mode uefi \
+    -r eu-central-1 \
+    --description "${desc}" \
+    --verbose \
+    -B ssd \
+"${image}"

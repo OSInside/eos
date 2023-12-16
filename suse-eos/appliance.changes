@@ -1,0 +1,32 @@
+-------------------------------------------------------------------
+Thu Dec 14 10:02:46 UTC 2023 - Marcus Schäfer <marcus.schaefer@gmail.com>
+
+- preload basesystem container in RO registry and provide
+  the fleet delta container for testing IoT devices. The
+  provided key-pair/certs are just for testing and can be wiped
+  in the cloud at any time
+
+-------------------------------------------------------------------
+Sun Nov 12 10:00:50 UTC 2023 - Marcus Schäfer <marcus.schaefer@gmail.com>
+
+- named grub config for RPI
+
+-------------------------------------------------------------------
+Fri Nov 10 11:46:49 UTC 2023 - Marcus Schäfer <marcus.schaefer@gmail.com>
+
+- allow for local build
+
+-------------------------------------------------------------------
+Mon Oct 30 12:44:54 UTC 2023 - Marcus Schäfer <marcus.schaefer@gmail.com>
+
+- consolidate rPI and VM build into one 
+
+-------------------------------------------------------------------
+Mon Oct 23 09:35:34 UTC 2023 - Marcus Schäfer <marcus.schaefer@gmail.com>
+
+- add vim editor
+
+-------------------------------------------------------------------
+Mon Oct 23 09:19:14 UTC 2023 - Marcus Schäfer <marcus.schaefer@gmail.com>
+
+- add changes file 

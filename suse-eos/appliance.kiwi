@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- The line below is required in order to use the multibuild OBS features -->
+<!-- OBS-Profiles: @BUILD_FLAVOR@ -->
+
+<image schemaversion="7.5" name="EOS" displayname="SUSE Embedded OS">
+    <description type="system">
+        <author>Marcus Schäfer</author>
+        <contact>marcus.schaefer@suse.com</contact>
+        <specification>Immutable Embeddded OS for Container workloads</specification>
+    </description>
+    <profiles>
+        <profile name="Static" description="Smallest Possible; No A/B update clones"/>
+        <profile name="AB" description="Rest Capacity, A/B OS updates possible"/>
+        <profile name="EC2" description="For AWS EC2, Rest Capacity, A/B OS updates possible"/>
+        <profile name="RPI" description="For Raspberry PI, Rest Capacity, A/B OS updates possible" arch="aarch64"/>
+    </profiles>
+    <preferences>
+        <version>1.0.1</version>
+        <packagemanager>zypper</packagemanager>
+        <locale>en_US</locale>
+        <keytable>us</keytable>
+        <timezone>UTC</timezone>
+        <rpm-excludedocs>true</rpm-excludedocs>
+        <rpm-check-signatures>false</rpm-check-signatures>
+    </preferences>
+    <preferences profiles="AB">
+        <type
+            image="oem"
+            filesystem="xfs"
+            firmware="efi"
+            initrd_system="dracut"
+            overlayroot="true"
+            overlayroot_write_partition="false"
+            bootpartition="false"
+            overlayroot_readonly_partsize="320"
+            squashfscompression="xz"
+            devicepersistency="by-label"
+            editbootinstall="registry.sh"
+            efipartsize="9"
+            spare_part="1"
+            spare_part_mountpoint="/var/lib/containers/storage"
+            spare_part_fs="xfs"
+            spare_part_is_last="true"
+            root_clone="1">
+            <bootloader name="grub2"/>
+            <oemconfig>
+                <oem-resize>false</oem-resize>
+            </oemconfig>
+            <size unit="M">1024</size>
+        </type>
+    </preferences>
+    <preferences profiles="Static">
+        <type
+            image="oem"
+            filesystem="xfs"
+            firmware="efi"
+            initrd_system="dracut"
+            overlayroot="true"
+            overlayroot_write_partition="false"
+            bootpartition="false"
+            overlayroot_readonly_partsize="320"
+            squashfscompression="xz"
+            devicepersistency="by-label"
+            editbootinstall="registry.sh"
+            efipartsize="9"
+            spare_part="1"
+            spare_part_mountpoint="/var/lib/containers/storage"
+            spare_part_fs="xfs"
+            spare_part_is_last="true">
+            <bootloader name="grub2"/>
+            <oemconfig>
+                <oem-resize>false</oem-resize>
+            </oemconfig>
+            <size unit="M">664</size>
+        </type>
+    </preferences>
+    <preferences profiles="EC2">
+        <type
+            image="oem"
+            filesystem="xfs"
+            firmware="efi"
+            initrd_system="dracut"
+            overlayroot="true"
+            overlayroot_write_partition="false"
+            bootpartition="false"
+            overlayroot_readonly_partsize="350"
+            squashfscompression="xz"
+            devicepersistency="by-label"
+            editbootinstall="registry.sh"
+            efipartsize="9"
+            spare_part="1"
+            spare_part_mountpoint="/var/lib/containers/storage"
+            spare_part_fs="xfs"
+            spare_part_is_last="true"
+            root_clone="1">
+            <bootloader name="grub2"/>
+            <oemconfig>
+                <oem-resize>false</oem-resize>
+            </oemconfig>
+            <partitions>
+                <!-- cloud-init needs write permissions for provisioning tasks -->
+                <partition name="home" size="20" mountpoint="/home" filesystem="ext4"/>
+                <partition name="cloud" size="5" mountpoint="/var/lib/cloud" filesystem="ext4"/>
+            </partitions>
+            <size unit="M">10240</size>
+            <machine xen_loader="hvmloader"/>
+        </type>
+    </preferences>
+    <preferences arch="aarch64" profiles="RPI">
+        <type
+            image="oem"
+            filesystem="xfs"
+            firmware="efi"
+            initrd_system="dracut"
+            overlayroot="true"
+            overlayroot_write_partition="false"
+            bootpartition="false"
+            overlayroot_readonly_partsize="320"
+            squashfscompression="xz"
+            devicepersistency="by-label"
+            editbootinstall="registry.sh"
+            efipartsize="10"
+            spare_part="1"
+            spare_part_mountpoint="/var/lib/containers/storage"
+            spare_part_fs="xfs"
+            spare_part_is_last="true"
+            root_clone="1">
+            <bootloader name="grub2"/>
+            <oemconfig>
+                <oem-resize>false</oem-resize>
+            </oemconfig>
+            <size unit="M">1024</size>
+        </type>
+    </preferences>
+    <users>
+        <user
+            password="$1$wYJUgpM5$RXMMeASDc035eX.NbYWFl0"
+            home="/root"
+            name="root"
+            groups="root"
+            shell="/bin/bash"/>
+    </users>
+    <users profiles="EC2">
+        <user
+            password="$1$wYJUgpM5$RXMMeASDc035eX.NbYWFl0"
+            home="/home/ec2-user"
+            name="ec2-user"
+            groups="users,root"/>
+    </users>
+    <repository type="rpm-md">
+        <source path="obsrepositories:/"/>
+    </repository>
+    <packages type="image">
+        <!-- kernel -->
+        <package name="kernel-default"/>
+        <!-- bootloader -->
+        <package name="grub2"/>
+        <package name="grub2-x86_64-efi" arch="x86_64"/>
+        <package name="grub2-arm64-efi" arch="aarch64"/>
+        <package name="grub2-i386-pc" arch="x86_64"/>
+        <!-- enable for root overlay (debugging) -->
+        <!-- <package name="dracut-kiwi-overlay"/> -->
+        <!-- system -->
+        <package name="timezone"/>
+        <package name="systemd"/>
+        <package name="systemd-network"/>
+        <package name="NetworkManager"/>
+        <package name="wireless-regdb"/>
+        <package name="wireless-tools"/>
+        <package name="wpa_supplicant"/>
+        <package name="openssh"/>
+        <package name="iproute2"/>
+        <package name="squashfs"/>
+        <package name="vim"/>
+        <!-- enable for testing with virtual TPM chip -->
+        <!-- <package name="tpm-tools"/> -->
+        <package name="cryptsetup"/>
+        <package name="podman"/>
+        <package name="netavark"/>
+        <package name="cni"/>
+        <package name="cni-plugins"/>
+        <package name="flake-pilot"/>
+        <package name="flake-pilot-podman"/>
+        <package name="flake-pilot-firecracker"/>
+        <package name="device-mapper"/>
+        <package name="binutils"/>
+        <package name="gptfdisk"/>
+        <package name="xfsprogs"/>
+        <package name="shadow"/>
+        <package name="eos-setup-base"/>
+        <package name="eos-setup-registry"/>
+        <package name="eos-setup-base-ssh-keys"/>
+    </packages>
+    <packages type="image" profiles="RPI">
+        <package name="raspberrypi-firmware"/>
+        <package name="raspberrypi-firmware-config"/>
+        <package name="raspberrypi-firmware-dt"/>
+        <package name="u-boot-rpiarm64"/>
+        <package name="raspberrypi-eeprom"/>
+        <package name="kernel-firmware-brcm"/>
+        <package name="arm-trusted-firmware-rpi4"/>
+        <package name="eos-setup-grub-rpi"/>
+        <package name="eos-setup-base-rpi"/>
+    </packages>
+    <packages type="image" profiles="AB">
+        <package name="eos-setup-grub-ab"/>
+    </packages>
+    <packages type="image" profiles="Static">
+        <package name="eos-setup-grub-static"/>
+    </packages>
+    <packages type="image" profiles="AB,Static">
+        <package name="eos-setup-base-vm"/>
+        <package name="eos-setup-base-ssh"/>
+    </packages>
+    <packages type="image" profiles="AB,EC2,RPI">
+        <package name="kexec-tools"/>
+        <package name="eos-setup-os-update"/>
+        <!-- preloaded containers -->
+        <package name="basesystem-image"/>
+        <package name="fleet-image"/>
+    </packages>
+    <packages type="image" profiles="EC2">
+        <package name="grub2-x86_64-xen" arch="x86_64"/>
+        <package name="chrony"/>
+        <package name="amazon-ssm-agent"/>
+        <package name="cloud-init"/>
+        <package name="cloud-init-config-suse"/>
+        <package name="openssh-server"/>
+        <package name="openssh-clients"/>
+        <package name="eos-setup-base-ec2"/>
+        <package name="eos-setup-grub-ec2"/>
+    </packages>
+    <packages type="bootstrap">
+        <package name="udev"/>
+        <package name="filesystem"/>
+        <package name="glibc-locale-base"/>
+        <package name="cracklib-dict-small"/>
+        <package name="ca-certificates"/>
+        <package name="ca-certificates-mozilla"/>
+        <package name="xz"/>
+        <package name="grep"/>
+        <package name="EOS-Embedded-release"/>
+    </packages>
+    <packages type="delete" profiles="AB,EC2,RPI">
+        <!-- it is in the registry now, so we can delete the package -->
+        <!-- <package name="core-image"/> -->
+    </packages>
+    <packages type="delete" profiles="AB,EC2,RPI">
+        <package name="basesystem-image"/>
+        <package name="fleet-image"/>
+    </packages>
+    <packages type="delete" profiles="AB,Static,RPI,EC2">
+        <package name="binutils"/>
+        <package name="btrfsprogs-udev-rules"/>
+        <package name="btrfsprogs"/>
+        <package name="dialog"/>
+        <package name="elfutils"/>
+        <package name="fillup"/>
+        <package name="fuse-overlayfs"/>
+        <package name="gawk"/>
+        <package name="gettext-runtime"/>
+        <package name="info"/>
+        <package name="lvm2"/>
+        <package name="mdadm"/>
+        <package name="parted"/>
+        <package name="perl-Bootloader"/>
+        <package name="pigz"/>
+        <package name="pv"/>
+        <package name="slirp4netns"/>
+        <package name="thin-provisioning-tools"/>
+        <package name="zstd"/>
+        <package name="zypper"/>
+    </packages>
+</image>

@@ -1,0 +1,6 @@
+<multibuild>
+    <flavor>Static</flavor>
+    <flavor>AB</flavor>
+    <flavor>EC2</flavor>
+    <flavor>RPI</flavor>
+</multibuild>

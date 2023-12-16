@@ -1,0 +1,30 @@
+#!/bin/bash
+
+set -ex
+
+if [ ! -d binaries ];then
+    echo "run 'osc getbinaries images_ALP x86_64 -M AB' first..."
+    exit 1
+fi
+
+if [ ! -e binaries/mysdcard.raw ];then
+    qemu-img create binaries/mysdcard.raw 4g
+    xz -dc binaries/EOS*.raw.xz |\
+        dd of=binaries/mysdcard.raw conv=notrunc status=progress
+fi
+
+if [ ! -e binaries/registry.raw ];then
+    qemu-img create binaries/registry.raw 20g
+fi
+
+qemu-kvm \
+    -m 4096 \
+    -cpu host \
+    -smp 2 \
+    -display none \
+    -bios /usr/share/qemu/ovmf-x86_64.bin \
+    -netdev user,id=user0,hostfwd=tcp::10022-:22 \
+    -device virtio-net-pci,netdev=user0,mac=52:54:00:6a:40:f8 \
+    -serial stdio \
+    -drive file=binaries/mysdcard.raw,if=virtio,format=raw \
+    -drive file=binaries/registry.raw,if=virtio,format=raw
