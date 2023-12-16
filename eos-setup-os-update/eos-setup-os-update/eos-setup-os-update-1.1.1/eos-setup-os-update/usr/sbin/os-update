@@ -1,0 +1,322 @@
+#!/bin/bash
+# Requires: bash, dd, kexec, mount, grub2-mkimage, cat, sha1sum, ssh
+
+set -e
+
+ARGUMENT_LIST=(
+    "check"
+    "commit"
+    "rollback"
+    "reboot"
+    "read:"
+    "apply"
+    "server:"
+    "pkey:"
+)
+
+# Functions
+usage() {
+    echo "os-update"
+    echo "  --read <stream_name> --server <user@server> --pkey <pkey>"
+    echo "      Read stream_name from user@server via ssh"
+    echo "  --check [--read <stream_name>] [--server <user@server>] [--pkey <pkey>]"
+    echo "      Check if the update OS is different from running OS"
+    echo "      Use data from /etc/os-update.yml"
+    echo "  --apply [--read <stream_name>] [--server <user@server>] [--pkey <pkey>]"
+    echo "      Read checks and apply the update to the system"
+    echo "      Use data from /etc/os-update.yml"
+    echo "  --commit"
+    echo "      Commit current running OS to be the default"
+    echo "  --rollback"
+    echo "      Rollback to former OS"
+    echo "  --reboot"
+    echo "      Reboot after commit or rollback"
+
+}
+
+cleanup() {
+    if mountpoint /mnt &>/dev/null; then
+        umount /mnt
+    fi
+}
+
+update() {
+    # 1. Get current mounted root device and use the other one for the update
+    current_root="$(findmnt -n -o SOURCE /)"
+    current_root_label=$(blkid -s PARTLABEL -o value "${current_root}")
+    if [ "${current_root_label}" = "p.lxreadonly" ];then
+        update_root=$(findfs "PARTLABEL=p.lxrootclone1")
+    elif [ "${current_root_label}" = "p.lxrootclone1" ];then
+        update_root=$(findfs "PARTLABEL=p.lxreadonly")
+    else
+        echo "Failed to identify update device for root: ${current_root}"
+        exit 1
+    fi
+    current_root_partuuid=$(blkid -s PARTUUID -o value "${current_root}")
+    update_root_partuuid=$(blkid -s PARTUUID -o value "${update_root}")
+    echo "Using ${update_root} for update..."
+
+    # 2. Fetch the update data and dump to the update partition
+    dd of="${update_root}" status=progress
+
+    # 3. Boot into updated system via kexec once
+    mount "${update_root}" /mnt
+    cmdline=$(
+        sed -e "s@root=PARTUUID=${current_root_partuuid}@root=PARTUUID=${update_root_partuuid}@" /proc/cmdline
+    )
+    kernel="/mnt/boot/Image"
+    if [ ! -e "${kernel}" ];then
+        # try default kernel name...
+        kernel="/mnt/boot/vmlinuz"
+    fi
+    kexec \
+        --debug \
+        --load ${kernel} \
+        --initrd /mnt/boot/initrd \
+        --command-line "${cmdline} COMMIT_UPDATE"
+    umount /mnt
+    echo "kexec into updated system..."
+    kexec --exec
+}
+
+check() {
+    chunk_size=10M
+    current_root="$(findmnt -n -o SOURCE /)"
+    current_os_shasum=$(
+        dd if="${current_root}" bs="${chunk_size}" count=1 2>/dev/null | sha1sum
+    )
+    update_os_shasum=$(
+        dd bs="${chunk_size}" count=1 iflag=fullblock 2>/dev/null | sha1sum
+    )
+    echo "Current OS: ${current_os_shasum}"
+    echo "Update OS : ${update_os_shasum}"
+    if [ "${current_os_shasum}" = "${update_os_shasum}" ];then
+        echo "Update stream not different from current OS"
+        return 0
+    fi
+    return 1
+}
+
+commit() {
+    if grep -q COMMIT_UPDATE /proc/cmdline; then
+        current_root="$(findmnt -n -o SOURCE /)"
+        uuid=$(readlink /boot/uuid)
+        current_root_partuuid=$(blkid -s PARTUUID -o value "${current_root}")
+        cat >/boot/efi/EFI/BOOT/earlyboot.cfg <<-EOF
+			search --file --set=root ${uuid}
+			set rootdev=PARTUUID=${current_root_partuuid}
+			export rootdev
+			set prefix=(\$root)/boot/grub2
+			configfile (\$root)/boot/grub2/grub.cfg
+		EOF
+        efi_arch="arm64-efi"
+        efi_image="bootaa64.efi"
+        if [ "$(uname -m)" = "x86_64" ];then
+            efi_arch="x86_64-efi"
+            efi_image="bootx64.efi"
+        fi
+        grub2-mkimage \
+            -O "${efi_arch}" \
+            -o /boot/efi/EFI/BOOT/"${efi_image}" \
+            -c /boot/efi/EFI/BOOT/earlyboot.cfg \
+            -p /boot/grub2 \
+            -d /usr/share/grub2/"${efi_arch}" \
+        linux configfile search_fs_file search normal gzio fat font \
+        minicmd gfxterm gfxmenu all_video squash4 loadenv part_gpt \
+        part_msdos efi_gop serial test echo
+        if [ "${argReboot}" ];then
+            umount /boot/efi
+            reboot -f
+        fi
+    fi
+}
+
+rollback() {
+    # 1. Get current mounted root device and use the other one for the rollback
+    current_root="$(findmnt -n -o SOURCE /)"
+    current_root_label=$(blkid -s PARTLABEL -o value "${current_root}")
+    if [ "${current_root_label}" = "p.lxreadonly" ];then
+        rollback_root=$(findfs "PARTLABEL=p.lxrootclone1")
+    elif [ "${current_root_label}" = "p.lxrootclone1" ];then
+        rollback_root=$(findfs "PARTLABEL=p.lxreadonly")
+    else
+        echo "Failed to identify rollback device for root: ${current_root}"
+        exit 1
+    fi
+    rollback_root_partuuid=$(blkid -s PARTUUID -o value "${rollback_root}")
+
+    # 2. Mount rollback device and read UUID for root
+    mount "${rollback_root}" /mnt
+    uuid=$(readlink /mnt/boot/uuid)
+    umount /mnt
+
+    # 3. Rollback grub image
+    echo "Using ${rollback_root} for rollback..."
+    cat >/boot/efi/EFI/BOOT/earlyboot.cfg <<-EOF
+		search --file --set=root ${uuid}
+		set rootdev=PARTUUID=${rollback_root_partuuid}
+		export rootdev
+		set prefix=(\$root)/boot/grub2
+		configfile (\$root)/boot/grub2/grub.cfg
+	EOF
+    efi_arch="arm64-efi"
+    efi_image="bootaa64.efi"
+    if [ "$(uname -m)" = "x86_64" ];then
+        efi_arch="x86_64-efi"
+        efi_image="bootx64.efi"
+    fi
+    grub2-mkimage \
+        -O "${efi_arch}" \
+        -o /boot/efi/EFI/BOOT/"${efi_image}" \
+        -c /boot/efi/EFI/BOOT/earlyboot.cfg \
+        -p /boot/grub2 \
+        -d /usr/share/grub2/"${efi_arch}" \
+    linux configfile search_fs_file search normal gzio fat font \
+    minicmd gfxterm gfxmenu all_video squash4 loadenv part_gpt \
+    part_msdos efi_gop serial test echo
+    if [ "${argReboot}" ];then
+        umount /boot/efi
+        reboot -f
+    fi
+}
+
+read_stream() {
+    local update_path=/srv/www/fleet/os-images
+    ssh -i "${argPkey}" \
+        -o StrictHostKeyChecking=no \
+        -o UserKnownHostsFile=/dev/null \
+        -o LogLevel=ERROR \
+        "${argServer}" "sudo cat ${update_path}/${argRead}.raw.dev"
+}
+
+prepare() {
+    local update_config=/etc/os-update.yml
+    local update_path=/srv/www/fleet/os-images
+    local pkey
+    local server
+    local name
+    if [ -e "${update_config}" ];then
+        pkey="$(yq '.update.pkey' "${update_config}")"
+        server="$(yq '.update.server' "${update_config}")"
+        name="$(yq '.update.name' "${update_config}")"
+    fi
+    if [ -z "${argRead}" ] && [ -n "${name}" ];then
+        argRead="${name}"
+    elif [ -z "${argRead}" ];then
+        echo "No image name provided, use --read"
+        exit 1
+    fi
+    if [ -z "${argServer}" ] && [ -n "${server}" ];then
+        argServer="${server}"
+    elif [ -z "${argServer}" ];then
+        echo "No update server provided, use --server"
+        exit 1
+    fi
+    if [ -z "${argPkey}" ] && [ -n "${pkey}" ];then
+        argPkey="${pkey}"
+    elif [ -z "${argPkey}" ];then
+        echo "No ssh pkey provided, use --pkey"
+        exit 1
+    fi
+    # check connectivity
+    if ! ssh -i "${argPkey}" \
+        -o StrictHostKeyChecking=no \
+        -o UserKnownHostsFile=/dev/null \
+        -o LogLevel=ERROR \
+        "${argServer}" \
+        "test -e ${update_path}/${argRead}.raw.dev"
+    then
+        exit 1
+    fi
+}
+
+apply() {
+    prepare
+    # checksum check and apply update
+    if ! read_stream | check;then
+        read_stream | update
+    fi
+}
+
+validate() {
+    prepare
+    read_stream | check
+}
+
+trap cleanup EXIT
+
+# Read Arguments
+if ! opts=$(getopt \
+    --longoptions "$(printf "%s," "${ARGUMENT_LIST[@]}")" \
+    --name "$(basename "$0")" \
+    --options "" \
+    -- "$@"
+); then
+    usage
+    exit 1
+fi
+
+eval set --"${opts}"
+
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        --check)
+            argCheck=1
+            shift
+            ;;
+
+        --commit)
+            argCommit=1
+            shift
+            ;;
+
+        --rollback)
+            argRollback=1
+            shift
+            ;;
+
+        --reboot)
+            argReboot=1
+            shift
+            ;;
+
+        --read)
+            argRead=$2
+            shift 2
+            ;;
+
+        --apply)
+            argApply=1
+            shift
+            ;;
+
+        --server)
+            argServer=$2
+            shift 2
+            ;;
+
+        --pkey)
+            argPkey=$2
+            shift 2
+            ;;
+
+        *)
+            break
+            ;;
+    esac
+done
+
+# Main
+if [ "${argCommit}" ];then
+    commit
+elif [ "${argRollback}" ];then
+    rollback
+elif [ "${argCheck}" ];then
+    validate
+elif [ "${argRead}" ] && [ "${argServer}" ] && [ "${argPkey}" ];then
+    read_stream
+elif [ "${argApply}" ];then
+    apply
+else
+    usage
+fi

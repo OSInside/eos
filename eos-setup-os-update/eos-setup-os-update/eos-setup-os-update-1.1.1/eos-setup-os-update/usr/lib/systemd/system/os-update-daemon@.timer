@@ -1,0 +1,12 @@
+[Unit]
+Description=OS update daemon periodically for %i.raw
+Requires=network-online.target
+After=network.target syslog.target
+
+[Timer]
+Unit=os-update-daemon@%i.service
+OnBootSec=1min
+OnUnitActiveSec=1h
+
+[Install]
+WantedBy=multi-user.target

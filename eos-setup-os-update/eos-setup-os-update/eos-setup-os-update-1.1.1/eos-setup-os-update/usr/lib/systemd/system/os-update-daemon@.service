@@ -1,0 +1,7 @@
+[Unit]
+Description=OS update daemon for %i.raw
+
+[Service]
+Type=simple
+EnvironmentFile=/etc/os-update-daemon.conf
+ExecStart=/usr/bin/os-update-daemon.sh --image /srv/www/fleet/os-images/%i.raw --oneshot

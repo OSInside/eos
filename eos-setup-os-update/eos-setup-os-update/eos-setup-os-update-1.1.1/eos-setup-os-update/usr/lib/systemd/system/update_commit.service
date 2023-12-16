@@ -1,0 +1,9 @@
+[Unit]
+Description=Commit OS Update
+
+[Service]
+Type=oneshot
+ExecStart=/usr/sbin/os-update --commit --reboot
+
+[Install]
+WantedBy=multi-user.target

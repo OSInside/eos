@@ -1,0 +1,9 @@
+[Unit]
+Description=OS Fetch Images
+
+[Service]
+Type=oneshot
+ExecStart=/srv/www/fleet/os-images/fetch
+
+[Install]
+WantedBy=multi-user.target

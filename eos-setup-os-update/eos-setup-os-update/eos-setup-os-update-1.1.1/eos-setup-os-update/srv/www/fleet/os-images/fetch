@@ -1,0 +1,21 @@
+#!/bin/bash
+# Fetch OS images as configured in /etc/os-update.yml...
+
+set -x
+
+update_config=/etc/os-update.yml
+
+if [ ! -e "${update_config}" ];then
+    logger -s "No ${update_config} found... exit"
+    exit 1
+fi
+
+count=0
+# start disk partition mapper daemon(s)...
+for image in $(yq '.update[].image' "${update_config}");do
+    echo "Activate update daemon for: ${image}..."
+    name=$(yq ".update[${count}].name" "${update_config}")
+    systemctl enable os-update-daemon@"$(basename "${name}" .raw)".timer
+    systemctl start os-update-daemon@"$(basename "${name}" .raw)".timer
+    count=$((count + 1))
+done
