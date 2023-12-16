@@ -1,0 +1,39 @@
+-------------------------------------------------------------------
+Mon Nov 20 08:52:27 UTC 2023 - Marcus Schäfer <marcus.schaefer@gmail.com>
+
+- provide extra package for ssh setup and keys
+
+-------------------------------------------------------------------
+Sat Nov 18 16:27:09 UTC 2023 - Marcus Schäfer <marcus.schaefer@gmail.com>
+
+- journal logging volatile
+
+-------------------------------------------------------------------
+Fri Nov 17 15:17:38 UTC 2023 - Marcus Schäfer <marcus.schaefer@gmail.com>
+
+- delete alias files
+
+-------------------------------------------------------------------
+Sun Nov 12 10:24:52 UTC 2023 - Marcus Schäfer <marcus.schaefer@gmail.com>
+
+- auto login only on VM
+
+-------------------------------------------------------------------
+Sun Nov 12 10:05:24 UTC 2023 - Marcus Schäfer <marcus.schaefer@gmail.com>
+
+- eos-setup-base-rpi
+
+-------------------------------------------------------------------
+Wed Nov  1 17:43:00 UTC 2023 - Marcus Schäfer <marcus.schaefer@gmail.com>
+
+- fixed sudo setup for ec2 
+
+-------------------------------------------------------------------
+Mon Oct 30 13:34:40 UTC 2023 - Marcus Schäfer <marcus.schaefer@gmail.com>
+
+- EOS-Automotive has been renamed to just EOS, update alias files
+
+-------------------------------------------------------------------
+Thu Oct 19 08:54:05 UTC 2023 - Marcus Schäfer <marcus.schaefer@gmail.com>
+
+- kickoff 

@@ -1,0 +1,24 @@
+#/bin/ash
+
+set -ex
+
+cp /etc/fstab /etc/fstab.orig
+
+# delete container registry mounts, done by registry.service
+head -n -1 /etc/fstab > /etc/fstab.new
+
+# add tmpfs mounts
+echo "tmpfs /tmp tmpfs defaults 0 0" >> /etc/fstab.new
+echo "tmpfs /var/tmp tmpfs defaults 0 0" >> /etc/fstab.new
+echo "tmpfs /var/log tmpfs defaults 0 0" >> /etc/fstab.new
+echo "tmpfs /var/lib/cni tmpfs defaults 0 0" >> /etc/fstab.new
+echo "tmpfs /etc/cni/net.d tmpfs defaults 0 0" >> /etc/fstab.new
+echo "tmpfs /var/cache/containers tmpfs defaults 0 0" >> /etc/fstab.new
+echo "tmpfs /var/lib/private/systemd/timesync tmpfs defaults 0 0" >> /etc/fstab.new
+echo "tmpfs /var/lib/systemd/timesync tmpfs defaults 0 0" >> /etc/fstab.new
+echo "tmpfs /var/lib/systemd/linger tmpfs defaults 0 0" >> /etc/fstab.new
+
+# for emulated TPM v1.2 (tcsd)
+# echo "tmpfs /var/lib/tpm tmpfs defaults 0 0" >> /etc/fstab.new
+
+mv /etc/fstab.new /etc/fstab
