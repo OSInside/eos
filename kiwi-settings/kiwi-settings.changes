@@ -1,0 +1,43 @@
+-------------------------------------------------------------------
+Thu Jul  6 15:57:36 UTC 2023 - Marcus Schäfer <marcus.schaefer@gmail.com>
+
+- activate compression
+
+  also building EC2 images which are by default 10G of size
+
+-------------------------------------------------------------------
+Sat Jul  1 16:15:43 UTC 2023 - Marcus Schäfer <marcus.schaefer@gmail.com>
+
+- disable compression
+
+  the project here targets embedded devices, the images are small
+
+-------------------------------------------------------------------
+Fri Mar 24 20:44:32 UTC 2023 - Marcus Schäfer <marcus.schaefer@gmail.com>
+
+- check_dracut_module_for_disk_overlay_in_package_list
+
+-------------------------------------------------------------------
+Thu Mar  9 20:29:21 UTC 2023 - Marcus Schäfer <marcus.schaefer@gmail.com>
+
+- Disable check_partuuid_persistency_type_used_with_mbr
+
+-------------------------------------------------------------------
+Fri Mar  3 19:28:34 UTC 2023 - Marcus Schäfer <marcus.schaefer@gmail.com>
+
+- use kpartx
+
+-------------------------------------------------------------------
+Tue Feb 21 16:02:26 UTC 2023 - Marcus Schäfer <marcus.schaefer@gmail.com>
+
+- Allow sudo
+
+-------------------------------------------------------------------
+Thu Dec  1 15:04:08 UTC 2022 - Schäfer Marcus <Marcus.Schaefer@elektrobit.com>
+
+- set kpartx as mapper tool
+
+-------------------------------------------------------------------
+Fri Jan 21 08:47:30 UTC 2022 - Schäfer Marcus <Marcus.Schaefer@elektrobit.com>
+
+- Runtime settings for kiwi
