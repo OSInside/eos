@@ -1,0 +1,11 @@
+[Unit]
+Description=Resize Container Registry
+After=registry-rw.service
+Requires=registry-rw.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/sbin/registry_resize
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,9 @@
+[Unit]
+Description=Activate Container Read/Write Registry
+
+[Service]
+Type=oneshot
+ExecStart=/usr/sbin/set_rw_registry
+
+[Install]
+WantedBy=multi-user.target

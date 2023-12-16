@@ -1,0 +1,33 @@
+#!/bin/sh
+# resize container storage
+
+set -ex
+
+tpm_key=/run/key
+
+trap "rm -f /run/key" EXIT
+
+root=$(findmnt -n -o SOURCE /)
+disk=$(lsblk -p -n -r -s -o NAME,TYPE "${root}" | grep -E disk | cut -f1 -d ' ')
+last_part=$(lsblk -p -n -r -o NAME,TYPE "${disk}" | grep -E part | tail -n 1 | cut -f1 -d ' ')
+
+# relocate gpt at end of disk
+sgdisk -e "${disk}"
+
+sfdisk -d "${disk}" > /run/table
+
+# last partition, flake store
+sed -ie "s@\(${last_part} : start=.*\), size=.*, \(type=.*, uuid=.*, name=\"p.spare\"\)@\1, \2@" \
+    /run/table
+
+sfdisk -f "${disk}" < /run/table
+
+partx -u "${disk}"
+
+set_tpmread > "${tpm_key}"
+
+cryptsetup --key-file "${tpm_key}" resize luksInstances
+
+rm -f "${tpm_key}"
+
+xfs_growfs /dev/mapper/luksInstances
