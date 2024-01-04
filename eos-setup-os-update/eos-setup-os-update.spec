@@ -54,6 +54,7 @@ rsync -av eos-setup-os-update/* %{buildroot}/
 /usr/lib/systemd/system/os-fetch.service
 /srv/www/fleet/os-images/fetch
 /usr/bin/os-update-daemon.sh
+/usr/bin/os-update-restricted.sh
 %config /etc/os-update-daemon.conf
 
 %changelog
