@@ -2,6 +2,11 @@
 
 set -ex
 
+if mountpoint /var/lib/containers/storage &>/dev/null; then
+    echo "Storage space already mounted"
+    exit 0
+fi
+
 tpm_key=/run/key
 
 trap "rm -f /run/key" EXIT
