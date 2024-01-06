@@ -30,7 +30,7 @@
             kernelcmdline="console=ttyS0,115200 console=tty0"
             devicepersistency="by-uuid">
             <oemconfig>
-                <oem-resize>false</oem-resize>
+                <oem-resize>true</oem-resize>
             </oemconfig>
             <bootloader name="grub2" timeout="3"/>
             <size unit="G">10</size>
@@ -82,6 +82,7 @@
         <package name="lsof"/>
         <package name="eos-setup-base"/>
         <package name="eos-setup-os-update-server"/>
+        <package name="dracut-kiwi-oem-repart"/>
     </packages>
 
     <packages type="image" profiles="ALP-EC2">
