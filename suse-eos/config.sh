@@ -4,6 +4,8 @@ set -ex
 
 declare kiwi_profiles=${kiwi_profiles}
 
+source /etc/os-release
+
 #======================================
 # Import Build Time Containers (RO)
 #--------------------------------------
@@ -140,12 +142,19 @@ arch=$(uname -m)
 #======================================
 # Setup update config
 #--------------------------------------
+dist=unknown
+if [ "${ID}" = "opensuse-tumbleweed" ];then
+    dist=TW
+fi
+if [ "${ID}" = "opensuse-alp" ];then
+    dist=ALP
+fi
 cat >/etc/os-update.yml <<- EOF
 ---
 update:
   pkey: /run/id_fleet
   server: ec2-user@ec2-3-124-29-196.eu-central-1.compute.amazonaws.com
-  name: EOS.${arch}-${kiwi_profiles}-ALP
+  name: EOS.${arch}-${kiwi_profiles}-${dist}
 EOF
 
 #==================================

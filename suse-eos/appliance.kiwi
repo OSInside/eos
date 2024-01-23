@@ -240,7 +240,6 @@
         <package name="ca-certificates-mozilla"/>
         <package name="xz"/>
         <package name="grep"/>
-        <package name="EOS-Embedded-release"/>
     </packages>
     <packages type="delete" profiles="AB,EC2,RPI">
         <!-- it is in the registry now, so we can delete the package -->
