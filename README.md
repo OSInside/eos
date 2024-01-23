@@ -62,7 +62,7 @@ mkdir binaries
 pushd binaries
 wget https://download.opensuse.org/repositories/home:/marcus.schaefer:/EOS/images_ALP/EOS.x86_64-AB.raw.xz
 popd
-wget https://raw.githubusercontent.com/OSInside/eos/master/suse-eos/run
+wget https://raw.githubusercontent.com/OSInside/eos/main/suse-eos/run
 chmod u+x run
 ./run
 ```
