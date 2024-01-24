@@ -59,7 +59,7 @@
             overlayroot="true"
             overlayroot_write_partition="false"
             bootpartition="false"
-            overlayroot_readonly_partsize="320"
+            overlayroot_readonly_partsize="350"
             squashfscompression="xz"
             devicepersistency="by-label"
             editbootinstall="registry.sh"
@@ -72,7 +72,7 @@
             <oemconfig>
                 <oem-resize>false</oem-resize>
             </oemconfig>
-            <size unit="M">664</size>
+            <size unit="M">694</size>
         </type>
     </preferences>
     <preferences profiles="EC2">
