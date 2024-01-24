@@ -80,24 +80,25 @@ done
 #======================================
 # Setup container policy
 #--------------------------------------
-cat >/etc/containers/policy.json <<- EOF
-{
-    "default": [
-        {
-            "type": "reject"
-        }
-    ],
-    "transports": {
-        "docker": {
-            "registry.opensuse.org": [
-                {
-                    "type": "insecureAcceptAnything"
-                }
-            ]
-        }
-    }
-}
-EOF
+# disabled for the moment, allow from anywhere
+# cat >/etc/containers/policy.json <<- EOF
+# {
+#     "default": [
+#         {
+#             "type": "reject"
+#         }
+#     ],
+#     "transports": {
+#         "docker": {
+#             "registry.opensuse.org": [
+#                 {
+#                     "type": "insecureAcceptAnything"
+#                 }
+#             ]
+#         }
+#     }
+# }
+# EOF
 
 #======================================
 # Setup container storage config
@@ -135,6 +136,10 @@ location = "registry.opensuse.org/home/marcus.schaefer/delta_containers/containe
 [[registry]]
 prefix = "registry.opensuse.org/ubuntu-apps"
 location = "registry.opensuse.org/home/marcus.schaefer/delta_containers/containers_ubuntu"
+
+[[registry]]
+prefix = "registry.opensuse.org/tw-apps"
+location = "registry.opensuse.org/home/marcus.schaefer/delta_containers/containers_tw"
 EOF
 
 arch=$(uname -m)
