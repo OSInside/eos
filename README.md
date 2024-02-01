@@ -192,8 +192,7 @@ given account.
 Setup the server requires the following steps:
 
 1. Launch an instance of the EOS Update Server AMI
-
-2. Edit the file ```/etc/os-update.yml``` and setup the image URL and
+1. Edit the file ```/etc/os-update.yml``` and setup the image URL and
    local image name to fetch an EOS like system. There
    are entries of the form:
 
@@ -207,8 +206,7 @@ Setup the server requires the following steps:
        image: https://download.opensuse.org/repositories/home:/marcus.schaefer:/EOS/images_TW/EOS.aarch64-RPI.raw.xz
        name: EOS.aarch64-RPI-TW.raw
    ```
-
-3. Call the os fetcher service
+1. Call the os fetcher service
 
    ```bash
    systemctl start os-fetch
@@ -228,8 +226,7 @@ Setup the server requires the following steps:
    fetched again. For setting up different lookup times the file
    ```/usr/lib/systemd/system/os-update-daemon@.timer``` needs to
    be changed accordingly
-
-4. Enable SSH based access to the update images
+1. Enable SSH based access to the update images
 
    Edit the file ```~/.ssh/authorized_keys``` and add an entry of the form:
 
