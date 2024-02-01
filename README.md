@@ -196,30 +196,30 @@ Setup the server requires the following steps:
    local image name to fetch an EOS like system. There
    are entries of the form:
 
-   ```yaml
-   ---
-   update:
-     -
-       image: https://download.opensuse.org/repositories/home:/marcus.schaefer:/EOS/images_ALP/EOS.aarch64-RPI.raw.xz
-       name: EOS.aarch64-RPI-ALP.raw
-     -
-       image: https://download.opensuse.org/repositories/home:/marcus.schaefer:/EOS/images_TW/EOS.aarch64-RPI.raw.xz
-       name: EOS.aarch64-RPI-TW.raw
-   ```
+    ```yaml
+    ---
+    update:
+      -
+        image: https://download.opensuse.org/repositories/home:/marcus.schaefer:/EOS/images_ALP/EOS.aarch64-RPI.raw.xz
+        name: EOS.aarch64-RPI-ALP.raw
+      -
+        image: https://download.opensuse.org/repositories/home:/marcus.schaefer:/EOS/images_TW/EOS.aarch64-RPI.raw.xz
+        name: EOS.aarch64-RPI-TW.raw
+    ```
 1. Call the os fetcher service
 
-   ```bash
-   systemctl start os-fetch
-   ```
+    ```bash
+    systemctl start os-fetch
+    ```
 
    This will call a one-shot service which fetches all the images
    referenced in ```/etc/os-update.yml``` and starts the actual
    ```os-update-daemon@.timer``` services. After the fetcher is done,
    the status of the individual update images can be watched as follows:
 
-   ```bash
-   systemctl status os-update-daemon@EOS.aarch64-RPI-TW.timer
-   ```
+    ```bash
+    systemctl status os-update-daemon@EOS.aarch64-RPI-TW.timer
+    ```
 
    The service will lookup periodically for changes of the image
    at the origin image URL. If the image has changed it will be
@@ -227,12 +227,11 @@ Setup the server requires the following steps:
    ```/usr/lib/systemd/system/os-update-daemon@.timer``` needs to
    be changed accordingly
 1. Enable SSH based access to the update images
-
    Edit the file ```~/.ssh/authorized_keys``` and add an entry of the form:
 
-   ```bash
-   command="/usr/bin/os-update-restricted.sh" KEY...
-   ```
+    ```bash
+    command="/usr/bin/os-update-restricted.sh" KEY...
+    ```
 
    The value for ```KEY...``` is the public key of the respective private
    key that is placed in the ```fleet``` container pre-installed to the
