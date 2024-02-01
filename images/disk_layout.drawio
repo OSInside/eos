@@ -1,0 +1,31 @@
+<mxfile host="app.diagrams.net" modified="2023-06-11T17:01:43.792Z" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36" etag="jhQgv-QA5iLlSpMW1t5A" version="21.1.8" type="device">
+  <diagram name="Seite-1" id="I9er8FYXnw6w3od-ajPh">
+    <mxGraphModel dx="1058" dy="574" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="JFolgBxbc9z3OKPWGCqx-12" value="" style="shape=card;whiteSpace=wrap;html=1;shadow=1;fillColor=#fff2cc;strokeColor=#d6b656;gradientColor=#ffd966;gradientDirection=south;" vertex="1" parent="1">
+          <mxGeometry x="300" y="20" width="280" height="385" as="geometry" />
+        </mxCell>
+        <mxCell id="JFolgBxbc9z3OKPWGCqx-7" value="" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=29;fillStyle=auto;shadow=0;strokeWidth=2;fillColor=default;strokeColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="350" y="50" width="180" height="330" as="geometry" />
+        </mxCell>
+        <mxCell id="JFolgBxbc9z3OKPWGCqx-3" value="&lt;font style=&quot;font-size: 14px;&quot;&gt;&lt;b&gt;Firmware Partition [FAT]&lt;/b&gt;&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;gradientColor=#97d077;" vertex="1" parent="1">
+          <mxGeometry x="360" y="120" width="160" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="JFolgBxbc9z3OKPWGCqx-4" value="&lt;font style=&quot;font-size: 14px;&quot;&gt;&lt;b&gt;Immutable RootFS [Squashfs]&lt;/b&gt;&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;gradientColor=#97d077;" vertex="1" parent="1">
+          <mxGeometry x="360" y="180" width="160" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="JFolgBxbc9z3OKPWGCqx-5" value="&lt;font style=&quot;font-size: 14px;&quot;&gt;&lt;b&gt;Optional RootFS Clone for A/B update&lt;/b&gt;&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;opacity=20;gradientColor=#b3b3b3;strokeColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="360" y="240" width="160" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="JFolgBxbc9z3OKPWGCqx-6" value="&lt;font style=&quot;font-size: 14px;&quot;&gt;&lt;b&gt;Write Space for Flake Apps [XFS]&lt;/b&gt;&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;gradientColor=#97d077;" vertex="1" parent="1">
+          <mxGeometry x="360" y="300" width="160" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="JFolgBxbc9z3OKPWGCqx-9" value="&lt;span style=&quot;font-size: 14px;&quot;&gt;&lt;b&gt;Partition Table&lt;/b&gt;&lt;/span&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="385" y="70" width="110" height="30" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

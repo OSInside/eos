@@ -2,36 +2,36 @@
 
 1. [Introduction](#introduction)
 2. [OS and AppStore Projects](#projects)
-3. [Run EOS on AWS](#aws)
-4. [Run EOS in KVM](#kvm)
-5. [Run EOS on RaspberryPI](#rpi)
+3. [Boot EOS](#boot)
+   1. [EOS on AWS](#aws)
+   2. [EOS in KVM](#kvm)
+   3. [EOS on RaspberryPI](#rpi)
 6. [Run A container workload on EOS](#container)
 7. [Run A VM workload on EOS](#firecracker)
-8. [Update an EOS instance](#update)
+8. [Setup Update Server](#updateserver)
+   1. [Update an EOS instance](#update)
 
 ## Introduction <a name="introduction"/>
 
 EOS is an OS design for embedded use cases. Workloads on EOS are
 expected to run as container or VM instances. The OS is fully
-immutable, except for the firmware partition. It is not expected
+immutable, except for the firmware partition. The following
+diagram shows the main disk layout:
+
+![](images/disk_layout.png)
+
+It is not expected
 that someone works with the system like with a classical server.
 This means if the OS has to change, this change needs to be
 performed in the OS project which builds the image, then tested
 and then published to an EOS update server. Any instance of EOS
 can then decide to fetch the update via the ```os-update```
-tool. The update uses the A/B partition concept and kexec to
-commit on success. The procedure can be compared to the way how
-your smartphone runs an update.
+tool. The update uses the A/B partition concept and is applied via
+kexec including a commit to indicate success. A reboot after commit
+can be performed optionally. The procedure is comparable to the
+way a mobile phone runs updates.
 
-EOS and its update server are currently provided on the following
-target platforms:
-
-* As AMI images in the AWS public cloud
-* As KVM virtual disk images for testing in QEMU/VMware, etc...
-* As RaspberryPI disk image for testing on the PIv4
-
-Any platform that supports kexec + grub|u-boot can be
-supported via EOS
+Any platform that supports kexec + grub|u-boot can be supported
 
 ## OS and AppStore Projects <a name="projects"/>
 
@@ -47,13 +47,21 @@ compatible VM images can be found here:
 
 * https://build.opensuse.org/project/show/home:marcus.schaefer:delta_containers
 
-## Run EOS on AWS <a name="aws"/>
+## Boot EOS <a name="boot"/>
 
-I'm hosting EOS AMI images in my private AWS account. If you are
-interested in running EOS in AWS please drop me a note and I will
-share the AMI with your account.
+EOS is currently provided on the following target platforms:
 
-## Run EOS in KVM <a name="kvm"/>
+* As AMI in the AWS public cloud
+* As KVM virtual disk image for testing in QEMU/VMware, etc...
+* As RaspberryPI disk image for testing on the PIv4/PIv5
+
+### EOS on AWS <a name="aws"/>
+
+The EOS AMI is not yet published and lives in a private AWS account.
+On interest please reach out for sharing the AMI ID with any
+given account.
+
+### EOS in KVM <a name="kvm"/>
 
 To run EOS in qemu-kvm fetch the following data and call the run script:
 
@@ -67,14 +75,15 @@ chmod u+x run
 ./run
 ```
 
-## Run EOS on RaspberryPI <a name="rpi"/>
+### EOS on RaspberryPI <a name="rpi"/>
 
-To run EOS on a RaspberryPI you need either an SD card or a USB storage disk.
-Connect the SD card or the USB stick to your workstation. The following procedure
-assumes your SD card or stick device appears as ```/dev/sdx```.
+To run EOS on a RaspberryPI an SD card or USB storage disk is required.
+Connect the SD card or the USB stick to a workstation.
+The following procedure assumes the SD card or stick device appears
+as ```/dev/sdx```.
 
-**_NOTE:_** If you dump data to the wrong device serious issues to your
-workstation data can be the result. You have been warned !
+**_NOTE:_** Dumping data to the wrong device can seriously harm
+the workstation and the data stored on it. You have been warned !
 
 ```bash
 wget https://download.opensuse.org/repositories/home:/marcus.schaefer:/EOS/images_ALP/EOS.aarch64-RPI.raw.xz
@@ -82,13 +91,17 @@ xz -d EOS.aarch64-RPI.raw.xz
 dd if=EOS.aarch64-RPI.raw.xz of=/dev/sdx status=progress
 ```
 
-Next plugin the SD card or stick to your RaspberryPI and boot up.
+Next put the SD card or stick to the RaspberryPI and boot up.
 
-**_NOTE:_** There is no graphics system configured on EOS. Thus only console messages
-will appear. I recommend to connect a serial console, at best via a TTL2USB switch.
-You should be able to see a ```/dev/dri``` device which will allow you to run
-a graphical compositor in a privileged container in case you want to run a graphical
-workload.
+**_NOTE:_** There is no graphics system configured on EOS. Thus only
+console messages will appear. Serial console access is therefore helpful,
+at best via a TTL2USB switch. The direct rendering interface ```/dev/dri```
+will be available to run a graphical compositor (e.g weston) in a
+privileged container to run graphical workloads. An example image build
+named ```suse-AGL``` that implements a graphical workload based on the
+EOS design can be found in the following project:
+
+* https://build.opensuse.org/package/show/home:marcus.schaefer:AGEDA
 
 ## Run A container workload on EOS <a name="container"/>
 
@@ -98,99 +111,201 @@ pre-populated ```basesystem``` container. The other part of the registry
 points to a fully writable and encrypted partition. This area is used to
 register and manage container instances. The read-write part of the container
 registry can also consume the pre-registered read-only basesystem container.
-Managing containers can be done via podman which is part of EOS or any other
-container management system e.g k3s but this needs to be installed into EOS
-first which requires adaptions to the EOS project.
+Managing containers is done via ```podman``` which is part of EOS. Using other
+container management systems like k3s is possible but needs adaptions to
+the EOS image description.
 
-Along with the well known ways of managing container workloads there is also
-another relatively new project that can orchestrate different containers
-into one prior launching them. For embedded use cases I find this particularly
-interesting and we call this a ```flake```. More about flakes here:
+Along with podman to run and handle container instances in a workload
+there is also another software called ```flake-pilot``` which orchestrates
+the container instances prior launching and registers a containerized
+application as an application binary which can be managed under the control
+of systemd. Such an application is called a ```flake```. More about flakes
+here:
 
 * https://github.com/OSInside/flake-pilot
 
 The AppStore project of EOS hosts OCI container images which are created
-to be used as a flake. Some of the containers there are built as delta
-base containers, which means they require a basesystem to function. The
+to be used as flakes. Some of the containers there are built as delta
+containers, which means they require a basesystem to function. The
 advantage here, the delta containers providing the applications are very
-small. For example there is the ```lynx``` console web browser. To use
-it run the following flake registration:
+small. As an example there is the ```lynx``` console web browser available
+as a flake. To use it run the following flake registration:
 
 ```bash
 flake-ctl podman register --container suse-apps/lynx --target /usr/bin/lynx --app /usr/share/flakes/bin/lynx --base basesystem
 ```
 
-Once done you have now a new command on your EOS named ```lynx``` and you
-can call it like a normal application:
+Once done, the system now has a new command named ```lynx``` and it
+can be called like a normal application as follows:
 
 ```
 lynx
 ```
 
-The launch indicator gives you a hint that this is not a normal application
+The launch indicator gives a hint that this is not a normal application
 but a container workload.
 
 ## Run A VM workload on EOS <a name="firecracker"/>
 
-EOS comes with firecracker which is a software by Amazon that allows to run
-virtual machine images through KVM. This means for VM workloads it's required
-that the machine you run EOS on supports KVM virtualization.
+EOS comes with ```firecracker``` which is a software by Amazon that
+allows to run virtual machine images through KVM. This means for VM
+workloads it's required that the machine EOS runs on supports KVM
+virtualization.
 
-As a user you can run firecracker manually but there is also support for
-firecracker in the flake-pilot firecracker backend. Thus starting a VM
-workload can also be done as follows:
+Similar to containers ```flake-pilot``` also supports VM
+orchestration through the firecracker backend. Registration and startup
+of a VM workload can be done as follows:
 
 ```bash
 flake-ctl firecracker pull --name leap --kis-image https://download.opensuse.org/repositories/home:/marcus.schaefer:/delta_containers/images_leap/firecracker-basesystem.$(uname -m).tar.xz
 flake-ctl firecracker register --vm leap --app /usr/share/flakes/bin/mybash --target /bin/bash --overlay-size 20GiB
 ```
 
-Once done you have now a new command on your EOS named ```mybash``` and you
-can call it like a normal application:
+Once done, the system now has a new command named ```mybash``` and it
+can be called like a normal application as follows:
 
 ```
 mybash --version
 ```
 
-## Update an EOS instance <a name="update"/>
+The launch indicator gives a hint that this is not a normal application
+but a VM workload
 
-To update the OS part of EOS, not the registry, a tool called ```os-update``` exists.
-os-update uses ```/etc/os-update.yml``` to get it's information about updates. There
-is an update server image registered as AMI image in my private AWS account and an
-instance of it is running to provide a public facing update server for testing.
+## Setup Update Server <a name="updateserver"/>
 
-Thus any instance of EOS can contact this server for updates of the EOS image.
+The EOS update server is built as an image as part of the EOS project here:
+
+* https://build.opensuse.org/package/show/home:marcus.schaefer:EOS/suse-eos-update
+
+The EOS update server can update any A/B based system that follows the
+disk layout of EOS. Thus it is not limited to EOS but it requires the
+disk layout of EOS. As of today the update server image builds as AWS
+AMI only. The reason for this is because the concept of this update
+process perfectly fits into the cloud world. There can be multiple instances
+of update servers around the globe with connectivity as well as bandwidth
+and storage resources controlled by the cloud system.
+
+The EOS update server AMI is not yet published and lives in a private
+AWS account. On interest please reach out for sharing the AMI ID with any
+given account.
+
+Setup the server requires the following steps:
+
+1. Launch an instance of the EOS Update Server AMI
+
+2. Edit the file ```/etc/os-update.yml``` and setup the image URL and
+   local image name to fetch an EOS like system. There
+   are entries of the form:
+
+   ```yaml
+   ---
+   update:
+     -
+       image: https://download.opensuse.org/repositories/home:/marcus.schaefer:/EOS/images_ALP/EOS.aarch64-RPI.raw.xz
+       name: EOS.aarch64-RPI-ALP.raw
+     -
+       image: https://download.opensuse.org/repositories/home:/marcus.schaefer:/EOS/images_TW/EOS.aarch64-RPI.raw.xz
+       name: EOS.aarch64-RPI-TW.raw
+   ```
+
+3. Call the os fetcher service
+
+   ```bash
+   systemctl start os-fetch
+   ```
+
+   This will call a one-shot service which fetches all the images
+   referenced in ```/etc/os-update.yml``` and starts the actual
+   ```os-update-daemon@.timer``` services. After the fetcher is done,
+   the status of the individual update images can be watched as follows:
+
+   ```bash
+   systemctl status os-update-daemon@EOS.aarch64-RPI-TW.timer
+   ```
+
+   The service will lookup periodically for changes of the image
+   at the origin image URL. If the image has changed it will be
+   fetched again. For setting up different lookup times the file
+   ```/usr/lib/systemd/system/os-update-daemon@.timer``` needs to
+   be changed accordingly
+
+4. Enable SSH based access to the update images
+
+   Edit the file ```~/.ssh/authorized_keys``` and add an entry of the form:
+
+   ```bash
+   command="/usr/bin/os-update-restricted.sh" KEY...
+   ```
+
+   The value for ```KEY...``` is the public key of the respective private
+   key that is placed in the ```fleet``` container pre-installed to the
+   EOS like image. The os-update-restricted.sh command makes sure that only
+   an os-update process is allowed with this key and nothing else.
+   
+For a closer look to the EOS update server, it helps to watch
+the contents of ```/srv/www/fleet/os-images```. In this directory
+all update images are hosted and loop-setup'ed such that only their
+OS root device can be streamed through the network. For the above
+example this looks like the following:
+
+```bash
+/srv/www/fleet/os-images/
+├── EOS.aarch64-RPI-TW.raw
+├── EOS.aarch64-RPI-TW.raw.dev -> /dev/loop5p3
+├── EOS.aarch64-RPI-TW.raw.sha
+```
+
+### Update an EOS instance <a name="update"/>
+
+For update of the main OS, a tool called ```os-update``` exists.
+os-update uses ```/etc/os-update.yml``` to get it's information about
+updates. There is an update server instance running on AWS to provide
+a public facing update server connected to the OBS project mentioned
+in [OS and AppStore Projects](#projects)
+
+Any instance of EOS can contact this server for updates of the main OS.
+
+**_NOTE:_** The OS update process is based on the mentioned A/B
+partition based concept and intentionally only covers the main OS
+which excludes any data on the write partition that stores the user
+data, e.g the container registry or the firecracker repository
+
 As EOS is a fully immutable OS, the check for an update is based on a simple
 checksum between the actual image on the update server and the current root
-device of the running system. To check for updates just call
+device of the running system.
+
+**_NOTE:_** To access the update server a key is required. This
+credentials information is provided in a pre-installed container
+named ```fleet``` and must be protected for real production systems.
+Along with the container a flake application of the same name is
+provided.
+
+To check for updates call:
 
 ```bash
 fleet --getkey
 os-update --check
 ```
 
-To access the update server a key is required. That key can be fetched via
-the ```fleet``` container which is pre-populated on the EOS image. For non
-public or production images this simple key deployment is of course not suitable.
-To actually apply an OS update just call
+To apply an OS update call:
 
 ```bash
 os-update --apply
 ```
 
-The update process will fetch the root OS partition and dump it in either A or B.
-After that the system gets activated through kexec. The kexec boot will commit
-the new system as the last systemd service in the chain. At this point we expect
-the system update to be successful. Only after commit a reboot of the system
-will effectively change the root partition device to either A or B. In case
-of any issue prior commit, no damage to the system has happened because no
-change was effectively committed. If the kexec turns the system into a dead
-loop or bricks it a power cycle needs to be issued to return the machine into
-a good state again. If after all the system committed the update but you
-realize the update is not ok for some other reason you can rollback via
+The update process will fetch the root OS partition and dump it in either
+A or B. After that the system gets activated through kexec. The kexec boot
+will commit the new system as the last systemd service in the chain. At
+this point we expect the system update to be successful. Only after commit
+the system has effectively changed the root partition device to
+either A or B. In case of any issue prior commit, no damage to the system
+has happened because no change was effectively committed. If the kexec turns
+the system into a dead loop or bricks it a power cycle needs to be issued
+to return the machine into a good state again. If, after all, the system
+committed the update but the update is not ok for some other
+reason, a rollback can be issued as follows:
 
 ```bash
 os-update --rollback
 reboot
 ```
-
