@@ -55,6 +55,16 @@ chroot /mnt /usr/bin/flake-ctl podman register \
     --opt '\--rm' \
     --opt '\-i' \
     --opt '\--volume /run:/run'
+
+# register core app
+chroot /mnt /usr/bin/flake-ctl podman register \
+    --container tw-apps/tw \
+    --target /usr/lib/systemd/systemd \
+    --app /usr/share/flakes/bin/core \
+    --attach \
+    --opt '\--privileged' \
+    --opt '\--net host' \
+    --opt '\-ti'
 umount /mnt/proc
 
 # umount storage
