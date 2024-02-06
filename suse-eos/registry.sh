@@ -58,7 +58,7 @@ chroot /mnt /usr/bin/flake-ctl podman register \
 
 # register core app
 chroot /mnt /usr/bin/flake-ctl podman register \
-    --container tw-apps/tw \
+    --container basesystem \
     --target /usr/lib/systemd/systemd \
     --app /usr/share/flakes/bin/core \
     --attach \
