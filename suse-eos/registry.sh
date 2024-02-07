@@ -62,7 +62,6 @@ chroot /mnt /usr/bin/flake-ctl podman register \
     --target /usr/lib/systemd/systemd \
     --app /usr/share/flakes/bin/core \
     --attach \
-    --opt '\--volume /lib/modules:/lib/modules' \
     --opt '\--privileged' \
     --opt '\--net host' \
     --opt '\-ti'
