@@ -191,6 +191,8 @@
         <package name="eos-setup-base"/>
         <package name="eos-setup-registry"/>
         <package name="eos-setup-base-ssh-keys"/>
+        <!-- image building -->
+        <package name="python3-kiwi_boxed_plugin"/>
     </packages>
     <packages type="image" profiles="RPI">
         <package name="raspberrypi-firmware"/>
@@ -265,7 +267,6 @@
         <package name="parted"/>
         <package name="perl-Bootloader"/>
         <package name="pigz"/>
-        <package name="pv"/>
         <package name="slirp4netns"/>
         <package name="thin-provisioning-tools"/>
         <package name="zstd"/>
