@@ -55,7 +55,7 @@ ln -s /var/lib/containers/storage/flakes /usr/share/flakes
 #======================================
 # Relink kiwi boxes to RW
 #--------------------------------------
-mkdir -p /root/.kiwi_boxes
+mkdir -p /var/lib/containers/storage/kiwi_boxes
 ln -s /var/lib/containers/storage/kiwi_boxes /root/.kiwi_boxes
 
 #======================================
