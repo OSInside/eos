@@ -33,7 +33,7 @@
             overlayroot="true"
             overlayroot_write_partition="false"
             bootpartition="false"
-            overlayroot_readonly_partsize="400"
+            overlayroot_readonly_partsize="512"
             squashfscompression="xz"
             devicepersistency="by-label"
             editbootinstall="registry.sh"
@@ -47,7 +47,7 @@
             <oemconfig>
                 <oem-resize>false</oem-resize>
             </oemconfig>
-            <size unit="M">1200</size>
+            <size unit="M">2048</size>
         </type>
     </preferences>
     <preferences profiles="Static">
@@ -59,7 +59,7 @@
             overlayroot="true"
             overlayroot_write_partition="false"
             bootpartition="false"
-            overlayroot_readonly_partsize="350"
+            overlayroot_readonly_partsize="512"
             squashfscompression="xz"
             devicepersistency="by-label"
             editbootinstall="registry.sh"
@@ -72,7 +72,7 @@
             <oemconfig>
                 <oem-resize>false</oem-resize>
             </oemconfig>
-            <size unit="M">694</size>
+            <size unit="M">1024</size>
         </type>
     </preferences>
     <preferences profiles="EC2">
@@ -84,7 +84,7 @@
             overlayroot="true"
             overlayroot_write_partition="false"
             bootpartition="false"
-            overlayroot_readonly_partsize="450"
+            overlayroot_readonly_partsize="512"
             squashfscompression="xz"
             devicepersistency="by-label"
             editbootinstall="registry.sh"
@@ -116,7 +116,7 @@
             overlayroot="true"
             overlayroot_write_partition="false"
             bootpartition="false"
-            overlayroot_readonly_partsize="430"
+            overlayroot_readonly_partsize="512"
             squashfscompression="xz"
             devicepersistency="by-label"
             editbootinstall="registry.sh"
@@ -130,7 +130,7 @@
             <oemconfig>
                 <oem-resize>false</oem-resize>
             </oemconfig>
-            <size unit="M">1200</size>
+            <size unit="M">2048</size>
         </type>
     </preferences>
     <users>
