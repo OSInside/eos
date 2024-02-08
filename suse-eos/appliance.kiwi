@@ -194,6 +194,8 @@
         <!-- image building -->
         <package name="git"/>
         <package name="qemu-kvm" arch="x86_64"/>
+        <package name="qemu-seabios" arch="x86_64"/>
+        <package name="qemu-ipxe"/>
         <package name="qemu-uefi-aarch64" arch="x86_64"/>
         <package name="python3-kiwi_boxed_plugin"/>
     </packages>
