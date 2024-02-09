@@ -207,6 +207,7 @@
         <package name="u-boot-rpiarm64"/>
         <package name="raspberrypi-eeprom"/>
         <package name="kernel-firmware-brcm"/>
+        <package name="bcm43xx-firmware"/>
         <package name="arm-trusted-firmware-rpi4"/>
         <package name="eos-setup-grub-rpi"/>
         <package name="eos-setup-base-rpi"/>
