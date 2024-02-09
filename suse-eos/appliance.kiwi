@@ -120,7 +120,7 @@
             squashfscompression="xz"
             devicepersistency="by-label"
             editbootinstall="registry.sh"
-            efipartsize="10"
+            efipartsize="200"
             spare_part="1"
             spare_part_mountpoint="/var/lib/containers/storage"
             spare_part_fs="xfs"
