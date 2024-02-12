@@ -1,0 +1,12 @@
+mapper:
+  - part_mapper: kpartx
+
+container:
+  # Specify compression for container images
+  # Possible values are true, false, xz or none.
+  - compress: true
+
+runtime_checks:
+  - disable:
+      - check_partuuid_persistency_type_used_with_mbr
+      - check_dracut_module_for_disk_overlay_in_package_list
