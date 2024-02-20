@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 set -ex
 
@@ -11,23 +11,27 @@ tpm_key=/run/key
 
 trap "rm -f /run/key" EXIT
 
-# read key
-set_tpmread > "${tpm_key}"
-
 # select device for read-write registry, last partition on disk
 root=$(findmnt -n -o SOURCE /)
 disk=$(lsblk -p -n -r -s -o NAME,TYPE "${root}" | grep -E disk | cut -f1 -d ' ')
 container_store_dev=$(lsblk -p -n -r -o NAME,TYPE "${disk}" | grep -E part | tail -n 1 | cut -f1 -d ' ')
 
-# run encryption key exchange and/or open
-if cryptsetup --key-file /dev/zero --keyfile-size 128 luksOpen $container_store_dev luksInstances &>/dev/null;then
-    echo "Running key exchange for read-write registry"
-    cryptsetup --key-file /dev/zero --keyfile-size 128 luksAddKey $container_store_dev "${tpm_key}"
-    cryptsetup --key-file /dev/zero --keyfile-size 128 luksRemoveKey $container_store_dev
-else
-    cryptsetup --key-file "${tpm_key}" luksOpen $container_store_dev luksInstances
+if [ "$(blkid -s TYPE -o value "${container_store_dev}")" = "crypto_LUKS" ];then
+    # read key
+    set_tpmread > "${tpm_key}"
+
+    # run encryption key exchange and/or open
+    if cryptsetup --key-file /dev/zero --keyfile-size 128 \
+        luksOpen "${container_store_dev}" luksInstances &>/dev/null
+    then
+        echo "Running key exchange for read-write registry"
+        cryptsetup --key-file /dev/zero --keyfile-size 128 luksAddKey "${container_store_dev}" "${tpm_key}"
+        cryptsetup --key-file /dev/zero --keyfile-size 128 luksRemoveKey "${container_store_dev}"
+    else
+        cryptsetup --key-file "${tpm_key}" luksOpen "${container_store_dev}" luksInstances
+    fi
+    container_store_dev=/dev/mapper/luksInstances
 fi
-container_store_dev=/dev/mapper/luksInstances
 
 # mount read-write registry, repair/reset in case of an error
 if ! mount $container_store_dev /var/lib/containers/storage; then

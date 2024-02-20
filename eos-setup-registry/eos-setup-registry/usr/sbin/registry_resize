@@ -24,10 +24,13 @@ sfdisk -f "${disk}" < /run/table
 
 partx -u "${disk}"
 
-set_tpmread > "${tpm_key}"
-
-cryptsetup --key-file "${tpm_key}" resize luksInstances
-
-rm -f "${tpm_key}"
-
-xfs_growfs /dev/mapper/luksInstances
+if [ -e /dev/mapper/luksInstances ];then
+    # encrypted registry
+    set_tpmread > "${tpm_key}"
+    cryptsetup --key-file "${tpm_key}" resize luksInstances
+    rm -f "${tpm_key}"
+    xfs_growfs /dev/mapper/luksInstances
+else
+    # raw registry
+    xfs_growfs "${last_part}"
+fi
