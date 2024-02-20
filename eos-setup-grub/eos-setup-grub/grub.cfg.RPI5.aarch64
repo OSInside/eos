@@ -1,0 +1,14 @@
+set default=1
+
+serial
+terminal_input serial
+terminal_output serial
+set timeout_style=menu
+set timeout=5
+
+menuentry 'EOS rPI'  --class os --unrestricted {
+	echo	'Loading Linux...'
+	linux	($root)/boot/Image root=$rootdev console=ttyAMA0,115200 loglevel=3 systemd.show_status=1 systemd.unified_cgroup_hierarchy=1
+	echo	'Loading initial ramdisk...'
+	initrd	($root)/boot/initrd
+}

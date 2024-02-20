@@ -60,6 +60,7 @@ cp eos-setup-grub/* %{buildroot}/boot/grub2
 %defattr(-,root,root)
 %dir /boot/grub2
 /boot/grub2/grub.cfg.RPI.aarch64
+/boot/grub2/grub.cfg.RPI5.aarch64
 
 %files -n eos-setup-grub-ec2
 %defattr(-,root,root)
