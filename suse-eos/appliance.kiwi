@@ -14,6 +14,7 @@
         <profile name="AB" description="Rest Capacity, A/B OS updates possible"/>
         <profile name="EC2" description="For AWS EC2, Rest Capacity, A/B OS updates possible"/>
         <profile name="RPI" description="For Raspberry PI, Rest Capacity, A/B OS updates possible" arch="aarch64"/>
+        <profile name="RPI5" description="For Raspberry PI5, Rest Capacity, A/B OS updates possible" arch="aarch64"/>
     </profiles>
     <preferences>
         <version>1.0.1</version>
@@ -36,7 +37,7 @@
             overlayroot_readonly_partsize="512"
             squashfscompression="xz"
             devicepersistency="by-label"
-            editbootinstall="registry.sh"
+            editbootinstall="registry_encrypted.sh"
             efipartsize="9"
             spare_part="1"
             spare_part_mountpoint="/var/lib/containers/storage"
@@ -62,7 +63,7 @@
             overlayroot_readonly_partsize="512"
             squashfscompression="xz"
             devicepersistency="by-label"
-            editbootinstall="registry.sh"
+            editbootinstall="registry_encrypted.sh"
             efipartsize="9"
             spare_part="1"
             spare_part_mountpoint="/var/lib/containers/storage"
@@ -87,7 +88,7 @@
             overlayroot_readonly_partsize="512"
             squashfscompression="xz"
             devicepersistency="by-label"
-            editbootinstall="registry.sh"
+            editbootinstall="registry_encrypted.sh"
             efipartsize="9"
             spare_part="1"
             spare_part_mountpoint="/var/lib/containers/storage"
@@ -119,7 +120,33 @@
             overlayroot_readonly_partsize="512"
             squashfscompression="xz"
             devicepersistency="by-label"
-            editbootinstall="registry.sh"
+            editbootinstall="registry_encrypted.sh"
+            efipartsize="10"
+            spare_part="1"
+            spare_part_mountpoint="/var/lib/containers/storage"
+            spare_part_fs="xfs"
+            spare_part_is_last="true"
+            root_clone="1">
+            <bootloader name="grub2"/>
+            <oemconfig>
+                <oem-resize>false</oem-resize>
+            </oemconfig>
+            <size unit="M">2048</size>
+        </type>
+    </preferences>
+    <preferences arch="aarch64" profiles="RPI5">
+        <type
+            image="oem"
+            filesystem="xfs"
+            firmware="efi"
+            initrd_system="dracut"
+            overlayroot="true"
+            overlayroot_write_partition="false"
+            bootpartition="false"
+            overlayroot_readonly_partsize="512"
+            squashfscompression="xz"
+            devicepersistency="by-label"
+            editbootinstall="registry_raw.sh"
             efipartsize="10"
             spare_part="1"
             spare_part_mountpoint="/var/lib/containers/storage"
@@ -201,6 +228,9 @@
         <package name="python3-kiwi_boxed_plugin"/>
     </packages>
     <packages type="image" profiles="RPI">
+        <package name="arm-trusted-firmware-rpi4"/>
+    </packages>
+    <packages type="image" profiles="RPI,RPI5">
         <package name="raspberrypi-firmware"/>
         <package name="raspberrypi-firmware-config"/>
         <package name="raspberrypi-firmware-dt"/>
@@ -208,7 +238,6 @@
         <package name="raspberrypi-eeprom"/>
         <package name="kernel-firmware-brcm"/>
         <package name="bcm43xx-firmware"/>
-        <package name="arm-trusted-firmware-rpi4"/>
         <package name="eos-setup-grub-rpi"/>
         <package name="eos-setup-base-rpi"/>
     </packages>
@@ -222,7 +251,7 @@
         <package name="eos-setup-base-vm"/>
         <package name="eos-setup-base-ssh"/>
     </packages>
-    <packages type="image" profiles="AB,EC2,RPI">
+    <packages type="image" profiles="AB,EC2,RPI,RPI5">
         <package name="kexec-tools"/>
         <package name="eos-setup-os-update"/>
         <!-- preloaded containers -->
@@ -250,15 +279,15 @@
         <package name="xz"/>
         <package name="grep"/>
     </packages>
-    <packages type="delete" profiles="AB,EC2,RPI">
+    <packages type="delete" profiles="AB,EC2,RPI,RPI5">
         <!-- it is in the registry now, so we can delete the package -->
         <!-- <package name="core-image"/> -->
     </packages>
-    <packages type="delete" profiles="AB,EC2,RPI">
+    <packages type="delete" profiles="AB,EC2,RPI,RPI5">
         <package name="basesystem-image"/>
         <package name="fleet-image"/>
     </packages>
-    <packages type="delete" profiles="AB,Static,RPI,EC2">
+    <packages type="delete" profiles="AB,Static,RPI,RPI5,EC2">
         <package name="binutils"/>
         <package name="btrfsprogs-udev-rules"/>
         <package name="btrfsprogs"/>

@@ -6,14 +6,15 @@ set -ex
 # RPI specific
 #---------------------------------------
 for profile in ${kiwi_profiles//,/ }; do
-    if [ "${profile}" = "RPI" ]; then
+    if [ "${profile}" = "RPI" ] || [ "${profile}" = "RPI5" ]; then
         #=======================================
         # Setup EFI
         #---------------------------------------
         # move rPI firmware from boot partition(s) to ESP
         cp -a /boot/vc/* /boot/efi/
         rm -rf /boot/vc
-
+    fi
+    if [ "${profile}" = "RPI" ]; then
         #=======================================
         # Enable USB boot
         #---------------------------------------
@@ -27,6 +28,34 @@ for profile in ${kiwi_profiles//,/ }; do
         echo "display_auto_detect=1" >> /boot/efi/config.txt
         echo "disable_overscan=1" >> /boot/efi/config.txt
         echo "gpu_mem=128" >> /boot/efi/config.txt
+    fi
+    if [ "${profile}" = "RPI5" ]; then
+        #=======================================
+        # Overwrite config
+        #---------------------------------------
+        cat >/boot/efi/config.txt <<- EOF
+			kernel=u-boot.bin
+			force_turbo=0
+			initial_turbo=30
+			over_voltage=0
+			avoid_warnings=1
+			dtoverlay=upstream
+			disable_overscan=1
+			dtoverlay=enable-bt
+			dtoverlay=smbios
+			[all]
+			include ubootconfig.txt
+			include extraconfig.txt
+			program_usb_boot_mode=1
+			dtoverlay=vc4-kms-v3d
+			max_framebuffers=2
+			display_auto_detect=1
+			disable_overscan=1
+			gpu_mem=128
+			enable_uart=1
+			dtparam=uart0_console
+			dtoverlay=uart0
+		EOF
     fi
 done
 

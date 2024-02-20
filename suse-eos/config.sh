@@ -234,11 +234,9 @@ rm -f /boot/grub2/grub.cfg.*
 #--------------------------------------
 for profile in ${kiwi_profiles//,/ }; do
     # RPI
-    if [ "${profile}" = "RPI" ]; then
+    if [ "${profile}" = "RPI" ] || [ "${profile}" = "RPI5" ]; then
         # reduce the kernel and save some space
-        if [ "${profile}" = "RPI" ];then
-            find /lib/modules/*/kernel/drivers/net/ethernet/* -type f ! -path "*broadcom*" -delete
-        fi
+        find /lib/modules/*/kernel/drivers/net/ethernet/* -type f ! -path "*broadcom*" -delete
         # RPI required services
         systemctl enable systemd-timesyncd
         systemctl enable update_commit
