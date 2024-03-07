@@ -136,10 +136,6 @@ cat >/etc/containers/registries.conf <<- EOF
 unqualified-search-registries=["registry.opensuse.org"]
 
 [[registry]]
-prefix = "registry.opensuse.org/suse-apps"
-location = "registry.opensuse.org/home/marcus.schaefer/delta_containers/containers_suse"
-
-[[registry]]
 prefix = "registry.opensuse.org/ubuntu-apps"
 location = "registry.opensuse.org/home/marcus.schaefer/delta_containers/containers_ubuntu"
 
