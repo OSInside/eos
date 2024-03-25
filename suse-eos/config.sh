@@ -7,6 +7,14 @@ declare kiwi_profiles=${kiwi_profiles}
 source /etc/os-release
 
 #======================================
+# World writable flakes
+#--------------------------------------
+# This needs a better solution for rootless use, similar to podman
+chmod 777 /usr/share/flakes
+chmod 777 /var/lib/firecracker/images
+chmod 777 /var/lib/firecracker/storage
+
+#======================================
 # Import Build Time Containers (RO)
 #--------------------------------------
 for profile in ${kiwi_profiles//,/ }; do
