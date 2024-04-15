@@ -21,7 +21,7 @@ fi
 
 ec2uploadimg \
     --wait-count 5 \
-    -a suse -f ~ms/.ec2/ec2utils.conf \
+    -a suse-pct -f ~ms/.ec2/ec2utils.conf \
     --grub2 \
     -m "${ec2arch}" \
     -n "${name}" \
