@@ -17,6 +17,15 @@ usage() {
     echo "      No daemon mode"
 }
 
+gc() {
+    image_dir=$1
+    for file in "${image_dir}"/*; do
+        if [ -f "${file}" ];then
+            test -s "${file}" || rm -f "${file}"
+        fi
+    done
+}
+
 download_image() {
     image_path=$1
     local count
@@ -28,6 +37,9 @@ download_image() {
     local name
     image=$(basename "${image_path}")
     image_dir=$(dirname "${image_path}")
+
+    gc "${image_dir}"
+
     pushd "${image_dir}" || exit 1
     count=0
     for imageurl in $(yq '.update[].image' "${update_config}");do
@@ -109,6 +121,7 @@ setup() {
 
 # read config file
 if [ -e /etc/os-update-daemon.conf ];then
+    # shellcheck disable=SC1091
     source /etc/os-update-daemon.conf
 fi
 
