@@ -168,7 +168,7 @@ cat >/etc/os-update.yml <<- EOF
 ---
 update:
   pkey: /run/id_fleet
-  server: ec2-user@ec2-3-124-29-196.eu-central-1.compute.amazonaws.com
+  server: ec2-user@ec2-3-125-193-126.eu-central-1.compute.amazonaws.com
   name: EOS.${arch}-${kiwi_profiles}-${dist}
 EOF
 
