@@ -27,6 +27,12 @@ for profile in ${kiwi_profiles//,/ }; do
 			gpu_mem=128
 		EOF
     fi
+    if [ "${profile}" = "RPI5" ]; then
+        cat >>/boot/efi/extraconfig.txt <<- EOF
+			dtparam=uart0_console
+			dtoverlay=uart0
+		EOF
+    fi
 done
 
 #=======================================
