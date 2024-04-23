@@ -183,15 +183,6 @@ EOF
 rm -f /etc/containers/registries.d/default.yaml
 rm -f /etc/containers/mounts.conf
 rm -f /usr/share/containers/mounts.conf
-rm -f /boot/vmlinux*
-rm -f /boot/config*
-rm -rf /usr/share/misc/*
-rm -rf /usr/share/licenses
-rm -f /boot/System.map*
-rm -f /boot/symvers*
-rm -f /boot/sysctl.conf*
-rm -rf /usr/src/packages
-find /usr/lib64/gconv/* ! -path "*ISO8859-1.so" -delete
 
 #==================================
 # Turn grub-mkconfig into a noop
@@ -239,8 +230,6 @@ rm -f /boot/grub2/grub.cfg.*
 for profile in ${kiwi_profiles//,/ }; do
     # RPI
     if [ "${profile}" = "RPI" ] || [ "${profile}" = "RPI5" ]; then
-        # reduce the kernel and save some space
-        find /lib/modules/*/kernel/drivers/net/ethernet/* -type f ! -path "*broadcom*" -delete
         # RPI required services
         systemctl enable systemd-timesyncd
         systemctl enable update_commit

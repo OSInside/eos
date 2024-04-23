@@ -236,6 +236,7 @@
         <package name="raspberrypi-firmware-dt"/>
         <package name="u-boot-rpiarm64"/>
         <package name="raspberrypi-eeprom"/>
+        <package name="kernel-firmware-bluetooth"/>
         <package name="kernel-firmware-brcm"/>
         <package name="bcm43xx-firmware"/>
         <package name="eos-setup-grub-rpi"/>
@@ -288,24 +289,6 @@
         <package name="fleet-image"/>
     </packages>
     <packages type="delete" profiles="AB,Static,RPI,RPI5,EC2">
-        <package name="binutils"/>
-        <package name="btrfsprogs-udev-rules"/>
-        <package name="btrfsprogs"/>
-        <package name="dialog"/>
-        <package name="elfutils"/>
-        <package name="fillup"/>
-        <package name="fuse-overlayfs"/>
-        <package name="gawk"/>
-        <package name="gettext-runtime"/>
-        <package name="info"/>
-        <package name="lvm2"/>
-        <package name="mdadm"/>
-        <package name="parted"/>
-        <package name="perl-Bootloader"/>
-        <package name="pigz"/>
-        <package name="slirp4netns"/>
-        <package name="thin-provisioning-tools"/>
-        <package name="zstd"/>
         <package name="zypper"/>
     </packages>
 </image>
