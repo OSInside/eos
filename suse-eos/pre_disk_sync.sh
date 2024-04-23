@@ -14,47 +14,17 @@ for profile in ${kiwi_profiles//,/ }; do
         cp -a /boot/vc/* /boot/efi/
         rm -rf /boot/vc
     fi
-    if [ "${profile}" = "RPI" ]; then
-        #=======================================
-        # Enable USB boot
-        #---------------------------------------
-        echo "program_usb_boot_mode=1" >> /boot/efi/config.txt
-
-        #=======================================
-        # Enable DRM VC4 V3D driver
-        #---------------------------------------
-        echo "dtoverlay=vc4-kms-v3d" >> /boot/efi/config.txt
-        echo "max_framebuffers=2" >> /boot/efi/config.txt
-        echo "display_auto_detect=1" >> /boot/efi/config.txt
-        echo "disable_overscan=1" >> /boot/efi/config.txt
-        echo "gpu_mem=128" >> /boot/efi/config.txt
-    fi
-    if [ "${profile}" = "RPI5" ]; then
-        #=======================================
-        # Overwrite config
-        #---------------------------------------
-        cat >/boot/efi/config.txt <<- EOF
-			kernel=u-boot.bin
-			force_turbo=0
-			initial_turbo=30
-			over_voltage=0
-			avoid_warnings=1
-			dtoverlay=upstream
-			disable_overscan=1
-			dtoverlay=enable-bt
-			dtoverlay=smbios
-			[all]
-			include ubootconfig.txt
-			include extraconfig.txt
+    if [ "${profile}" = "RPI" ] || [ "${profile}" = "RPI5" ]; then
+        cat >/boot/efi/extraconfig.txt <<- EOF
+			# Enable USB boot
 			program_usb_boot_mode=1
+
+			# Enable DRM VC4 V3D driver
 			dtoverlay=vc4-kms-v3d
 			max_framebuffers=2
 			display_auto_detect=1
 			disable_overscan=1
 			gpu_mem=128
-			enable_uart=1
-			dtparam=uart0_console
-			dtoverlay=uart0
 		EOF
     fi
 done
