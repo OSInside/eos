@@ -25,6 +25,9 @@ for profile in ${kiwi_profiles//,/ }; do
 			display_auto_detect=1
 			disable_overscan=1
 			gpu_mem=128
+
+			# Enable I2C (1)
+			dtparam=i2c1=on
 		EOF
     fi
     if [ "${profile}" = "RPI5" ]; then
