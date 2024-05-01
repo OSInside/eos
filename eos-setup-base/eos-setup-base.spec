@@ -112,6 +112,7 @@ mkdir -p %{buildroot}/var/lib/systemd/linger
 %config /etc/dracut.conf.d/07-aws-type-switch.conf
 %config /etc/udev/rules.d/69-nvme-timeout.rules
 %config /etc/modprobe.d/50-nvme.conf
+%config /etc/modprobe.d/40-i2c.conf
 %config %attr(0440, root, root) /etc/sudoers.d/ec2
 
 %changelog
