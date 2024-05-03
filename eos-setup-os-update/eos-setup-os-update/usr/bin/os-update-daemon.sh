@@ -45,7 +45,8 @@ download_image() {
     for imageurl in $(yq '.update[].image' "${update_config}");do
         name=$(yq ".update[${count}].name" "${update_config}")
         checksum_file="${name}.sha"
-        device_link="${name}.dev"
+        root_link="${name}.dev"
+        firmware_link="${name}.firmware"
         count=$((count + 1))
         if [ ! "${name}" = "${image}" ];then
             continue
@@ -62,22 +63,27 @@ download_image() {
                 break
             fi
         fi
-        if [ -e "${device_link}" ];then
-            partition=$(readlink "${device_link}")
-            loop_and_part=$(basename "${partition}" | cut -c5-)
-            loop=/dev/loop$(echo "${loop_and_part}" | cut -f1 -dp)
-            partid=$(echo "${loop_and_part}" | cut -f2 -dp)
-            if [ -n "${partition}" ] && lsof "${partition}" &>/dev/null; then
-                logger -s "Partition device has active readers... skipped"
-                rm -f "$$-${name}" "${device_link}"
+        if [ -e "${root_link}" ] && [ -e "${firmware_link}" ];then
+            busy=false
+            for link in "${root_link}" "${firmware_link}";do
+                partition=$(readlink "${link}")
+                loop_and_part=$(basename "${partition}" | cut -c5-)
+                loop=/dev/loop$(echo "${loop_and_part}" | cut -f1 -dp)
+                if [ -n "${partition}" ] && lsof "${partition}" &>/dev/null; then
+                    logger -s "Partition device has active readers... skipped"
+                    rm -f "$$-${name}" "${link}"
+                    busy=true
+                fi
+            done
+            if [ "${busy}" = "true" ];then
                 break
             fi
-            if ! partx --delete --nr "${partid}":"${partid}" "${loop}";then
-                rm -f "$$-${name}" "${device_link}"
+            if ! partx --delete "${loop}";then
+                rm -f "$$-${name}" "${root_link}"
                 break
             fi
             if ! losetup -d "${loop}";then
-                rm -f "$$-${name}" "${device_link}"
+                rm -f "$$-${name}" "${root_link}"
                 break
             fi
         fi
@@ -91,24 +97,33 @@ download_image() {
 
 setup_stream() {
     image=$1
-    device_link="${image}.dev"
+    root_link="${image}.dev"
+    firmware_link="${image}.firmware"
     if [ ! -e "${image}" ];then
         logger -s "No such image ${image}"
         return
     fi
     loop=$(losetup -f --show "${image}")
+
     partid=$(gdisk -l "${loop}" | grep p.lxreadonly | cut -f4 -d" ")
     partx --add --nr "${partid}":"${partid}" "${loop}"
     partition="${loop}p${partid}"
     logger -s "Streaming setup for: $(blkid "${partition}")"
-    logger -s "Linking stream to ${device_link}"
-    ln -sf "${partition}" "${device_link}"
+    logger -s "Linking stream to ${root_link}"
+    ln -sf "${partition}" "${root_link}"
+
+    partid=$(gdisk -l "${loop}" | grep p.UEFI | cut -f4 -d" ")
+    partx --add --nr "${partid}":"${partid}" "${loop}"
+    partition="${loop}p${partid}"
+    logger -s "Streaming setup for: $(blkid "${partition}")"
+    logger -s "Linking stream to ${firmware_link}"
+    ln -sf "${partition}" "${firmware_link}"
 }
 
 create_checksum() {
     local image=$1
     local checksum_file="${image}.sha"
-    logger -s "Create image and checksum: ${checksum_file}"
+    logger -s "Create image checksum: ${checksum_file}"
     sha1sum "${image}" > "${checksum_file}"
 }
 
