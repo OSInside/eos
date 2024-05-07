@@ -10,6 +10,7 @@ ARGUMENT_LIST=(
     "reboot"
     "read:"
     "apply"
+    "firmware"
     "server:"
     "pkey:"
 )
@@ -19,12 +20,16 @@ usage() {
     echo "os-update"
     echo "  --read <stream_name> --server <user@server> --pkey <pkey>"
     echo "      Read stream_name from user@server via ssh"
-    echo "  --check [--read <stream_name>] [--server <user@server>] [--pkey <pkey>]"
+    echo "  --check"
     echo "      Check if the update OS is different from running OS"
     echo "      Use data from /etc/os-update.yml"
-    echo "  --apply [--read <stream_name>] [--server <user@server>] [--pkey <pkey>]"
+    echo "  --apply"
     echo "      Read checks and apply the update to the system"
     echo "      Use data from /etc/os-update.yml"
+    echo "  --firmware"
+    echo "      Read checks and apply the new firmware to the system"
+    echo "      Use data from /etc/os-update.yml"
+    echo "      NOTE: no rollback implemented for firmware updates"
     echo "  --commit"
     echo "      Commit current running OS to be the default"
     echo "  --rollback"
@@ -38,6 +43,22 @@ cleanup() {
     if mountpoint /mnt &>/dev/null; then
         umount /mnt
     fi
+}
+
+update_firmware() {
+    # 1. Get firmware device
+    firmware_device="$(findmnt -n -o SOURCE /boot/efi)"
+    echo "Using ${firmware_device} for update..."
+
+    # 2. Umount
+    umount /boot/efi
+
+    # 3. Fetch the firmware data and dump to the firmware partition
+    dd of="${firmware_device}" status=progress
+
+    # 4. mount
+    mount -a
+    echo "Firmware update done, reboot required !"
 }
 
 update() {
@@ -180,13 +201,22 @@ rollback() {
     fi
 }
 
+read_stream_firmware() {
+    read_stream ".raw.firmware"
+}
+
+read_stream_system() {
+    read_stream ".raw.dev"
+}
+
 read_stream() {
+    local target=$1
     local update_path=/srv/www/fleet/os-images
     ssh -i "${argPkey}" \
         -o StrictHostKeyChecking=no \
         -o UserKnownHostsFile=/dev/null \
         -o LogLevel=ERROR \
-        "${argServer}" "sudo cat ${update_path}/${argRead}.raw.dev"
+        "${argServer}" "sudo cat ${update_path}/${argRead}${target}"
 }
 
 prepare() {
@@ -233,14 +263,20 @@ prepare() {
 apply() {
     prepare
     # checksum check and apply update
-    if ! read_stream | check;then
-        read_stream | update
+    if ! read_stream_system | check;then
+        read_stream_system | update
     fi
+}
+
+apply_firmware() {
+    prepare
+    # apply firmware
+    read_stream_firmware | update_firmware
 }
 
 validate() {
     prepare
-    read_stream | check
+    read_stream_system | check
 }
 
 trap cleanup EXIT
@@ -290,6 +326,11 @@ while [[ $# -gt 0 ]]; do
             shift
             ;;
 
+        --firmware)
+            argFirmware=1
+            shift
+            ;;
+
         --server)
             argServer=$2
             shift 2
@@ -317,6 +358,8 @@ elif [ "${argRead}" ] && [ "${argServer}" ] && [ "${argPkey}" ];then
     read_stream
 elif [ "${argApply}" ];then
     apply
+elif [ "${argFirmware}" ];then
+    apply_firmware
 else
     usage
 fi
