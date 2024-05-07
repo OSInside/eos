@@ -47,6 +47,7 @@ cleanup() {
 
 update_firmware() {
     # 1. Backup current OS EFI binary
+    rm -rf /run/EFI
     cp -a /boot/efi/EFI/ /run
 
     # 2. Get firmware device
