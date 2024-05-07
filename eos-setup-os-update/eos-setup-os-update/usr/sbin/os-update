@@ -46,18 +46,24 @@ cleanup() {
 }
 
 update_firmware() {
-    # 1. Get firmware device
+    # 1. Backup current OS EFI binary
+    cp -a /boot/efi/EFI/ /run
+
+    # 2. Get firmware device
     firmware_device="$(findmnt -n -o SOURCE /boot/efi)"
     echo "Using ${firmware_device} for update..."
 
-    # 2. Umount
+    # 3. Umount
     umount /boot/efi
 
-    # 3. Fetch the firmware data and dump to the firmware partition
+    # 4. Fetch the firmware data and dump to the firmware partition
     dd of="${firmware_device}" status=progress
 
-    # 4. mount
+    # 5. mount
     mount -a
+
+    # 6. Restore current OS EFI binary
+    cp -a /run/EFI/* /boot/efi/EFI/
     echo "Firmware update done, reboot required !"
 }
 
