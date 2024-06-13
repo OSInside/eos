@@ -20,8 +20,8 @@ chmod 777 /var/lib/firecracker/storage
 for profile in ${kiwi_profiles//,/ }; do
     if [ ! "${profile}" = "Static" ]; then
         pushd /usr/share/suse-docker-images/native/
-        podman load -i basesystem.*.tar.xz
-        rm -f basesystem.*.tar.xz
+        podman load -i basesystem.*.tar
+        rm -f basesystem.*.tar
         popd
         break
     fi
@@ -81,8 +81,8 @@ chmod 750 /var/lib/containers
 for profile in ${kiwi_profiles//,/ }; do
     if [ ! "${profile}" = "Static" ]; then
         pushd /usr/share/suse-docker-images/native/
-        for container in *.tar.xz ;do
-            acceptable_name=$(echo "${container}" | cut -f1 -d.).tar.xz
+        for container in *.tar ;do
+            acceptable_name=$(echo "${container}" | cut -f1 -d.).tar
             mv "${container}" "${acceptable_name}"
             podman load -i "${acceptable_name}"
         done
