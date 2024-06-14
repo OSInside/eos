@@ -200,6 +200,7 @@
         <package name="iproute2"/>
         <package name="squashfs"/>
         <package name="vim"/>
+        <package name="procps"/>
         <!-- enable for testing with virtual TPM chip -->
         <!-- <package name="tpm-tools"/> -->
         <package name="cryptsetup"/>
