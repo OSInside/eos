@@ -47,6 +47,7 @@ rsync -av eos-setup-os-update/* %{buildroot}/
 
 %files -n eos-setup-os-update-server
 %defattr(-,root,root)
+%dir /srv/www
 %dir /srv/www/fleet
 %dir /srv/www/fleet/os-images
 /usr/lib/systemd/system/os-update-daemon@.service
