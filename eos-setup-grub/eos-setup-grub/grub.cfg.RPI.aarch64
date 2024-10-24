@@ -1,5 +1,12 @@
 set default=1
 
+insmod all_video
+insmod gettext
+loadfont ($root)/usr/share/grub2/unicode.pf2
+set gfxmode=auto
+set locale_dir=$prefix/locale
+set lang=en_US
+
 serial
 terminal_input serial
 terminal_output serial
