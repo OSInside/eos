@@ -96,9 +96,11 @@ grub2-mkimage \
     -c /mnt/boot/efi/EFI/BOOT/earlyboot.cfg \
     -p /mnt/boot/grub2 \
     -d /mnt/usr/share/grub2/"${efi_arch}" \
-    linux configfile search_fs_file search normal gzio fat font \
-    minicmd gfxterm gfxmenu all_video squash4 loadenv part_gpt \
-    part_msdos efi_gop serial test echo
+    all_video boot cat configfile efi_gop fat font gfxmenu \
+    gfxterm gzio halt iso9660 jpeg linux loadenv loopback minicmd \
+    normal part_gpt part_msdos password password_pbkdf2 png \
+    reboot search search_fs_file search_fs_uuid search_label \
+    serial squash4 video test true sleep echo
 
 # umount ROOT + ESP
 umount /mnt/boot/efi
