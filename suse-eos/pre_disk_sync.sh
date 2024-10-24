@@ -46,6 +46,15 @@ touch /boot/${uuid}
 ln -s /boot/${uuid} /boot/uuid
 
 #=======================================
+# Create kernel links
+#---------------------------------------
+pushd boot
+rm -f Image initrd
+ln -s Image-* Image
+ln -s initrd-* initrd
+popd
+
+#=======================================
 # Create stub resolv.conf link
 #---------------------------------------
 # kiwi cleanup has dropped stale resolv.conf
