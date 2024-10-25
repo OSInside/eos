@@ -196,6 +196,7 @@ cp /usr/bin/true /usr/sbin/grub2-mkconfig
 # Mask services due to RO system
 #----------------------------------
 for service in \
+    systemd-networkd-persistent-storage.service \
     systemd-rfkill.service \
     systemd-rfkill.socket \
     logrotate.service \
