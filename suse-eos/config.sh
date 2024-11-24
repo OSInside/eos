@@ -10,6 +10,7 @@ source /etc/os-release
 # World writable flakes
 #--------------------------------------
 # This needs a better solution for rootless use, similar to podman
+mkdir -p /usr/share/flakes
 chmod 777 /usr/share/flakes
 chmod 777 /var/lib/firecracker/images
 chmod 777 /var/lib/firecracker/storage
