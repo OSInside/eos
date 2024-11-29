@@ -201,6 +201,7 @@
         <package name="squashfs"/>
         <package name="vim"/>
         <package name="procps"/>
+        <package name="skopeo"/>
         <!-- enable for testing with virtual TPM chip -->
         <!-- <package name="tpm-tools"/> -->
         <package name="cryptsetup"/>
@@ -291,5 +292,6 @@
     </packages>
     <packages type="delete" profiles="AB,Static,RPI,RPI5,EC2">
         <package name="zypper"/>
+        <package name="skopeo"/>
     </packages>
 </image>
