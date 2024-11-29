@@ -48,17 +48,17 @@ mv /tmp/storage/* /mnt/var/lib/containers/storage/
 # register fleet app
 mount -t proc proc /mnt/proc
 chroot /mnt /usr/bin/flake-ctl podman register \
-    --container fleet \
+    --container tw-apps/fleet \
     --target /usr/bin/fleet \
     --app /usr/share/flakes/bin/fleet \
-    --base basesystem \
+    --base tw-apps/basesystem \
     --opt '\--rm' \
     --opt '\-i' \
     --opt '\--volume /run:/run'
 
 # register core app
 chroot /mnt /usr/bin/flake-ctl podman register \
-    --container basesystem \
+    --container tw-apps/basesystem \
     --target /usr/lib/systemd/systemd \
     --app /usr/share/flakes/bin/core \
     --attach \

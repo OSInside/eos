@@ -15,14 +15,20 @@ chmod 777 /usr/share/flakes
 chmod 777 /var/lib/firecracker/images
 chmod 777 /var/lib/firecracker/storage
 
+export CONTAINERS_STORAGE_CONF=/etc/flakes/storage.conf
+
 #======================================
 # Import Build Time Containers (RO)
 #--------------------------------------
 for profile in ${kiwi_profiles//,/ }; do
     if [ ! "${profile}" = "Static" ]; then
         pushd /usr/share/suse-docker-images/native/
-        podman load -i basesystem.*.tar
+        skopeo copy \
+            docker-archive:basesystem.*.tar \
+            oci-archive:basesystem.tar:tw-apps/basesystem
+        podman load -i basesystem.tar
         rm -f basesystem.*.tar
+        rm -f basesystem.tar
         popd
         break
     fi
@@ -83,9 +89,13 @@ for profile in ${kiwi_profiles//,/ }; do
     if [ ! "${profile}" = "Static" ]; then
         pushd /usr/share/suse-docker-images/native/
         for container in *.tar ;do
-            acceptable_name=$(echo "${container}" | cut -f1 -d.).tar
+            acceptable_name=$(echo "${container}" | cut -f1 -d.)
             mv "${container}" "${acceptable_name}"
+            skopeo copy \
+                docker-archive:"${acceptable_name}" \
+                oci-archive:"${acceptable_name}":tw-apps/"${acceptable_name}"
             podman load -i "${acceptable_name}"
+            rm -f "${acceptable_name}"
         done
         popd
         break
