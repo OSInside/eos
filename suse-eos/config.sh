@@ -23,8 +23,9 @@ export CONTAINERS_STORAGE_CONF=/etc/flakes/storage.conf
 for profile in ${kiwi_profiles//,/ }; do
     if [ ! "${profile}" = "Static" ]; then
         pushd /usr/share/suse-docker-images/native/
+        acceptable_name=$(echo basesystem.*.tar)
         skopeo copy \
-            docker-archive:basesystem.*.tar \
+            docker-archive:"${acceptable_name}" \
             oci-archive:basesystem.tar:tw-apps/basesystem
         podman load -i basesystem.tar
         rm -f basesystem.*.tar
