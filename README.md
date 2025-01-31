@@ -70,7 +70,7 @@ mkdir binaries
 pushd binaries
 wget https://download.opensuse.org/repositories/home:/marcus.schaefer:/EOS/images_ALP/EOS.x86_64-AB.raw.xz
 popd
-wget https://raw.githubusercontent.com/OSInside/eos/main/suse-eos/run
+wget https://raw.githubusercontent.com/OSInside/eos/main/eos/run
 chmod u+x run
 ./run
 ```
@@ -175,7 +175,7 @@ but a VM workload
 
 The EOS update server is built as an image as part of the EOS project here:
 
-* https://build.opensuse.org/package/show/home:marcus.schaefer:EOS/suse-eos-update
+* https://build.opensuse.org/package/show/home:marcus.schaefer:EOS/eos-update
 
 The EOS update server can update any A/B based system that follows the
 disk layout of EOS. Thus it is not limited to EOS but it requires the
