@@ -1,4 +1,4 @@
-# SUSE EOS - Embedded OS
+# EOS - Embedded OS
 
 1. [Introduction](#introduction)
 2. [OS and AppStore Projects](#projects)
