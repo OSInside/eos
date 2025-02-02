@@ -8,7 +8,8 @@
    3. [EOS on RaspberryPI](#rpi)
 6. [Run A container workload on EOS](#container)
 7. [Run A VM workload on EOS](#firecracker)
-8. [Setup Update Server](#updateserver)
+8. [Changing Flake Registry](#flakeregistry)
+9. [Setup Update Server](#updateserver)
    1. [Update an EOS instance](#update)
 
 ## Introduction <a name="introduction"/>
@@ -170,6 +171,27 @@ mybash --version
 
 The launch indicator gives a hint that this is not a normal application
 but a VM workload
+
+## Changing Flake Registry <a name="flakeregistry"/>
+
+On EOS the only place to write anything is the flake registry.
+Everything else is read-only on a filesystem that does not
+implement write(). The target device for this registry can be
+setup and activated through the ```flake-registry``` command.
+Setup a new registry can be done as follows:
+
+```
+flake-registry --setup /dev/storage/device
+```
+
+**_NOTE:_** The given device will be wiped !
+
+Activating a device setup as a flake registry can be done as
+follows:
+
+```
+flake-registry --activate /dev/storage/device
+```
 
 ## Setup Update Server <a name="updateserver"/>
 
