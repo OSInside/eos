@@ -212,8 +212,7 @@ for service in \
     systemd-rfkill.service \
     systemd-rfkill.socket \
     logrotate.service \
-    logrotate.timer \
-    var-log-journal.mount
+    logrotate.timer
 do
     systemctl mask "${service}"
 done
