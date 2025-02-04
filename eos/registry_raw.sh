@@ -80,6 +80,10 @@ grub2-mkimage \
     reboot search search_fs_file search_fs_uuid search_label \
     serial squash4 video test true sleep echo
 
+# Delete unneded metadata
+rm -f /mnt/boot/efi/EFI/BOOT/earlyboot.cfg
+rm -f /mnt/boot/efi/EFI/BOOT/grub.cfg
+
 # umount ROOT + ESP
 umount /mnt/boot/efi
 umount /mnt

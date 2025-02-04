@@ -39,12 +39,6 @@ for profile in ${kiwi_profiles//,/ }; do
 done
 
 #=======================================
-# Delete unneded metadata
-#---------------------------------------
-rm -f /boot/efi/EFI/BOOT/earlyboot.cfg
-rm -f /boot/efi/EFI/BOOT/grub.cfg
-
-#=======================================
 # Create UUID because squashfs has none
 #---------------------------------------
 uuid=$(uuidgen)
