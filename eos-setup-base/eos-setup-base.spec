@@ -62,12 +62,14 @@ Provides ssh pub keys
 %install
 rsync -av eos-setup-base/* %{buildroot}/
 mkdir -p %{buildroot}/var/lib/systemd/linger
+mkdir -p %{buildroot}/etc/containers/networks
 
 %files
 %defattr(-,root,root)
 %dir /var/lib/systemd
 %dir /var/lib/systemd/linger
 %dir /etc/containers
+%dir /etc/containers/networks
 %dir /etc/systemd
 %dir /etc/systemd/network
 %dir /etc/systemd/system

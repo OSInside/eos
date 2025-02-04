@@ -13,6 +13,7 @@ echo "tmpfs /var/tmp tmpfs defaults 0 0" >> /etc/fstab.new
 echo "tmpfs /var/log tmpfs defaults 0 0" >> /etc/fstab.new
 echo "tmpfs /var/lib/cni tmpfs defaults 0 0" >> /etc/fstab.new
 echo "tmpfs /etc/cni/net.d tmpfs defaults 0 0" >> /etc/fstab.new
+echo "tmpfs /etc/containers/networks tmpfs defaults 0 0" >> /etc/fstab.new
 echo "tmpfs /var/cache/containers tmpfs defaults 0 0" >> /etc/fstab.new
 echo "tmpfs /var/lib/private/systemd/timesync tmpfs defaults 0 0" >> /etc/fstab.new
 echo "tmpfs /var/lib/systemd/timesync tmpfs defaults 0 0" >> /etc/fstab.new
