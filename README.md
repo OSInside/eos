@@ -243,6 +243,12 @@ Setup the server requires the following steps:
     systemctl status os-update-daemon@EOS.aarch64-RPI-TW.timer
     ```
 
+   To see all timers call:
+
+    ```bash
+    ls -l /etc/systemd/system/multi-user.target.wants/os-update-daemon*
+    ```
+
    The service will lookup periodically for changes of the image
    at the origin image URL. If the image has changed it will be
    fetched again. For setting up different lookup times the file
