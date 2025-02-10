@@ -59,7 +59,9 @@ echo "export PATH=\$PATH:/usr/share/flakes/bin" >> /etc/profile
 # Move containers to read-only registry
 #--------------------------------------
 # move containers to additionalimagestores [read-only]
-mv /usr/share/flakes/storage /var/lib/containers/loaded
+if [ -e /usr/share/flakes/storage ];then
+    mv /usr/share/flakes/storage /var/lib/containers/loaded
+fi
 
 #======================================
 # Move flakes to read-write registry
