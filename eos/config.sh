@@ -173,7 +173,7 @@ dist=unknown
 if [ "${ID}" = "opensuse-tumbleweed" ];then
     dist=TW
 fi
-if [ "${ID}" = "opensuse-alp" ];then
+if [ "${ID}" = "alp" ];then
     dist=ALP
 fi
 cat >/etc/os-update.yml <<- EOF
