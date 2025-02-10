@@ -26,7 +26,7 @@ for profile in ${kiwi_profiles//,/ }; do
         acceptable_name=$(echo basesystem.*.tar)
         skopeo copy \
             docker-archive:"${acceptable_name}" \
-            oci-archive:basesystem.tar:tw-apps/basesystem
+            oci-archive:basesystem.tar:registry.opensuse.org/tw-apps/basesystem
         podman load -i basesystem.tar
         rm -f basesystem.*.tar
         rm -f basesystem.tar
@@ -59,7 +59,7 @@ echo "export PATH=\$PATH:/usr/share/flakes/bin" >> /etc/profile
 # Move containers to read-only registry
 #--------------------------------------
 # move containers to additionalimagestores [read-only]
-mv /var/lib/containers/storage /var/lib/containers/loaded
+mv /usr/share/flakes/storage /var/lib/containers/loaded
 
 #======================================
 # Move flakes to read-write registry
@@ -94,7 +94,7 @@ for profile in ${kiwi_profiles//,/ }; do
             mv "${container}" "${acceptable_name}"
             skopeo copy \
                 docker-archive:"${acceptable_name}" \
-                oci-archive:"${acceptable_name}":tw-apps/"${acceptable_name}"
+                oci-archive:"${acceptable_name}":registry.opensuse.org/tw-apps/"${acceptable_name}"
             podman load -i "${acceptable_name}"
             rm -f "${acceptable_name}"
         done
@@ -127,13 +127,9 @@ done
 # EOF
 
 #======================================
-# Setup container storage config
+# Setup flake container storage config
 #--------------------------------------
-cat >/etc/containers/storage.conf <<- EOF
-[storage]
-driver = "overlay"
-graphroot = "/var/lib/containers/storage"
-runroot = "/var/run/containers/storage"
+cat >>/etc/flakes/storage.conf <<- EOF
 [storage.options]
 additionalimagestores = ['/var/lib/containers/loaded']
 EOF
