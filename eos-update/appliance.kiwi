@@ -9,6 +9,7 @@
 
     <profiles>
         <profile name="ALP-EC2" description="Update Server for EOS ALP"/>
+        <profile name="TW-EC2" description="Update Server for EOS TW"/>
     </profiles>
 
     <preferences>
@@ -38,7 +39,7 @@
         </type>
     </preferences>
 
-    <users profiles="ALP-EC2">
+    <users profiles="ALP-EC2,TW-EC2">
         <user
             password="$1$wYJUgpM5$RXMMeASDc035eX.NbYWFl0"
             home="/home/ec2-user"
@@ -85,7 +86,7 @@
         <package name="dracut-kiwi-oem-repart"/>
     </packages>
 
-    <packages type="image" profiles="ALP-EC2">
+    <packages type="image" profiles="ALP-EC2,TW-EC2">
         <package name="eos-setup-base-ec2"/>
     </packages>
 

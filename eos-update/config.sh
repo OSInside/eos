@@ -30,7 +30,7 @@ EOF
 # Cloud setup per profile
 #--------------------------------------
 for profile in ${kiwi_profiles//,/ }; do
-    if [ "${profile}" = "ALP-EC2" ]; then
+    if [ "${profile}" = "ALP-EC2" ] || [ "${profile}" = "TW-EC2" ]; then
         #======================================
         # Services
         #--------------------------------------
