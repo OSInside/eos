@@ -227,7 +227,7 @@
         <package name="qemu-vgabios" arch="x86_64"/>
         <package name="qemu-uefi-aarch64" arch="aarch64"/>
         <package name="qemu-ipxe"/>
-        <package name="python3-kiwi_boxed_plugin"/>
+        <!-- <package name="python3-kiwi_boxed_plugin"/> -->
     </packages>
     <packages type="image" profiles="RPI">
         <package name="arm-trusted-firmware-rpi4"/>
