@@ -20,20 +20,20 @@ export CONTAINERS_STORAGE_CONF=/etc/flakes/storage.conf
 #======================================
 # Import Build Time Containers (RO)
 #--------------------------------------
-for profile in ${kiwi_profiles//,/ }; do
-    if [ ! "${profile}" = "Static" ]; then
-        pushd /usr/share/suse-docker-images/native/
-        acceptable_name=$(echo fleet.*.tar)
-        skopeo copy \
-            docker-archive:"${acceptable_name}" \
-            oci-archive:fleet.tar:registry.opensuse.org/tw-apps/fleet
-        podman load -i fleet.tar
-        rm -f fleet.*.tar
-        rm -f fleet.tar
-        popd
-        break
-    fi
-done
+# for profile in ${kiwi_profiles//,/ }; do
+#    if [ ! "${profile}" = "Static" ]; then
+#        pushd /usr/share/suse-docker-images/native/
+#        acceptable_name=$(echo basesystem.*.tar)
+#        skopeo copy \
+#            docker-archive:"${acceptable_name}" \
+#            oci-archive:basesystem.tar:registry.opensuse.org/tw-apps/basesystem
+#        podman load -i basesystem.tar
+#        rm -f basesystem.*.tar
+#        rm -f basesystem.tar
+#        popd
+#        break
+#    fi
+# done
 
 #======================================
 # Create timesync subdirs
