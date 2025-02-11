@@ -131,10 +131,10 @@ done
 #======================================
 # Setup flake container storage config
 #--------------------------------------
-cat >>/etc/flakes/storage.conf <<- EOF
-[storage.options]
-additionalimagestores = ['/var/lib/containers/loaded']
-EOF
+# cat >>/etc/flakes/storage.conf <<- EOF
+# [storage.options]
+# additionalimagestores = ['/var/lib/containers/loaded']
+# EOF
 
 #======================================
 # Setup flakes.yml
