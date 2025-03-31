@@ -69,7 +69,7 @@ To run EOS in qemu-kvm fetch the following data and call the run script:
 ```bash
 mkdir binaries
 pushd binaries
-wget https://download.opensuse.org/repositories/home:/marcus.schaefer:/EOS/images_ALP/EOS.x86_64-AB.raw.xz
+wget https://download.opensuse.org/repositories/home:/marcus.schaefer:/EOS/images_TW/EOS.x86_64-AB.raw.xz
 popd
 wget https://raw.githubusercontent.com/OSInside/eos/main/eos/run
 chmod u+x run
@@ -87,7 +87,7 @@ as ```/dev/sdx```.
 the workstation and the data stored on it. You have been warned !
 
 ```bash
-wget https://download.opensuse.org/repositories/home:/marcus.schaefer:/EOS/images_ALP/EOS.aarch64-RPI.raw.xz
+wget https://download.opensuse.org/repositories/home:/marcus.schaefer:/EOS/images_TW/EOS.aarch64-RPI.raw.xz
 xz -d EOS.aarch64-RPI.raw.xz
 dd if=EOS.aarch64-RPI.raw.xz of=/dev/sdx status=progress
 ```
@@ -221,9 +221,6 @@ Setup the server requires the following steps:
     ```yaml
     ---
     update:
-      -
-        image: https://download.opensuse.org/repositories/home:/marcus.schaefer:/EOS/images_ALP/EOS.aarch64-RPI.raw.xz
-        name: EOS.aarch64-RPI-ALP.raw
       -
         image: https://download.opensuse.org/repositories/home:/marcus.schaefer:/EOS/images_TW/EOS.aarch64-RPI.raw.xz
         name: EOS.aarch64-RPI-TW.raw
