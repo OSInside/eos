@@ -91,6 +91,7 @@
     </packages>
 
     <packages type="bootstrap">
+        <package name="dracut"/>
         <package name="filesystem"/>
         <package name="glibc-locale-base"/>
         <package name="ca-certificates"/>
