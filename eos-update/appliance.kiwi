@@ -78,6 +78,7 @@
         <package name="openssh-server"/>
         <package name="openssh-clients"/>
         <package name="systemd-network"/>
+        <package name="systemd-resolved"/>
         <package name="wget"/>
         <package name="kernel-default"/>
         <package name="lsof"/>
