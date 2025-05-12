@@ -192,6 +192,7 @@
         <package name="timezone"/>
         <package name="systemd"/>
         <package name="systemd-network"/>
+        <package name="systemd-resolved"/>
         <package name="NetworkManager"/>
         <package name="wireless-regdb"/>
         <package name="wireless-tools"/>
