@@ -74,6 +74,7 @@ mkdir -p %{buildroot}/etc/containers/networks
 %dir /etc/systemd/network
 %dir /etc/systemd/system
 %dir /etc/systemd/system/serial-getty@ttyS0.service.d
+%dir /etc/systemd/system/getty@tty1.service.d
 %dir /etc/udev
 %dir /etc/udev/rules.d
 %dir /etc/systemd/journald.conf.d
@@ -103,6 +104,7 @@ mkdir -p %{buildroot}/etc/containers/networks
 %files -n eos-setup-base-vm
 %defattr(-,root,root)
 %config /etc/systemd/system/serial-getty@ttyS0.service.d/override.conf
+%config /etc/systemd/system/getty@tty1.service.d/override.conf
 
 %files -n eos-setup-base-ec2
 %defattr(-,root,root)
