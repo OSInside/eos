@@ -7,15 +7,14 @@ set gfxmode=auto
 set locale_dir=$prefix/locale
 set lang=en_US
 
-serial
-terminal_input serial
-terminal_output serial
+terminal_input gfxterm
+terminal_output gfxterm
 set timeout_style=menu
 set timeout=5
 
 menuentry 'EOS'  --class os --unrestricted {
 	echo	'Loading Linux...'
-	linux	($root)/boot/vmlinuz root=$rootdev console=ttyS0,115200 loglevel=3 systemd.show_status=1 systemd.unified_cgroup_hierarchy=1
+	linux	($root)/boot/vmlinuz root=$rootdev loglevel=3 systemd.show_status=1 systemd.unified_cgroup_hierarchy=1
 	echo	'Loading initial ramdisk...'
 	initrd	($root)/boot/initrd
 }
