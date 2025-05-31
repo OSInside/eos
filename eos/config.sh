@@ -220,8 +220,6 @@ done
 #--------------------------------------
 for service in \
     sshd \
-    registry-rw \
-    registry_resize \
     systemd-networkd \
     systemd-resolved
 do
