@@ -60,7 +60,7 @@
             overlayroot="true"
             overlayroot_write_partition="false"
             bootpartition="false"
-            overlayroot_readonly_partsize="512"
+            overlayroot_readonly_partsize="1024"
             squashfscompression="xz"
             devicepersistency="by-label"
             editbootinstall="registry_encrypted.sh"
@@ -73,7 +73,7 @@
             <oemconfig>
                 <oem-resize>false</oem-resize>
             </oemconfig>
-            <size unit="M">1024</size>
+            <size unit="M">2048</size>
         </type>
     </preferences>
     <preferences profiles="EC2">
