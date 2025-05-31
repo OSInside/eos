@@ -7,7 +7,7 @@ set gfxmode=auto
 set locale_dir=$prefix/locale
 set lang=en_US
 
-terminal_input gfxterm
+terminal_input console
 terminal_output gfxterm
 set timeout_style=menu
 set timeout=5
