@@ -15,7 +15,15 @@ chmod 777 /usr/share/flakes
 chmod 777 /var/lib/firecracker/images
 chmod 777 /var/lib/firecracker/storage
 
+#======================================
+# Custom flake registry for podman cmds
+#--------------------------------------
 export CONTAINERS_STORAGE_CONF=/etc/flakes/storage.conf
+
+#======================================
+# hostname
+#--------------------------------------
+echo EOS > /etc/hostname
 
 #======================================
 # Import Build Time Containers (RO)
