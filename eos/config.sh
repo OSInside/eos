@@ -220,7 +220,6 @@ done
 #--------------------------------------
 for service in \
     sshd \
-    systemd-networkd \
     systemd-resolved
 do
     systemctl enable "${service}"
@@ -244,6 +243,7 @@ for profile in ${kiwi_profiles//,/ }; do
         systemctl enable update_commit
         systemctl enable registry-rw
         systemctl enable registry_resize
+        systemctl enable systemd-networkd
     fi
 
     # AB
@@ -253,12 +253,14 @@ for profile in ${kiwi_profiles//,/ }; do
         systemctl enable update_commit
         systemctl enable registry-rw
         systemctl enable registry_resize
+        systemctl enable systemd-networkd
     fi
 
     # Static
     if [ "${profile}" = "Static" ]; then
         # Static required services
         systemctl enable systemd-timesyncd
+        systemctl enable NetworkManager
     fi
 
     # EC2
@@ -272,6 +274,7 @@ for profile in ${kiwi_profiles//,/ }; do
             cloud-final \
             amazon-ssm-agent \
             update_commit \
+            systemd-networkd \
             registry-rw \
             registry_resize
         do

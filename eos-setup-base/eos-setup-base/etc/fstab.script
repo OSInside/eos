@@ -18,6 +18,7 @@ echo "tmpfs /var/cache/containers tmpfs defaults 0 0" >> /etc/fstab.new
 echo "tmpfs /var/lib/private/systemd/timesync tmpfs defaults 0 0" >> /etc/fstab.new
 echo "tmpfs /var/lib/systemd/timesync tmpfs defaults 0 0" >> /etc/fstab.new
 echo "tmpfs /var/lib/systemd/linger tmpfs defaults 0 0" >> /etc/fstab.new
+echo "tmpfs /etc/NetworkManager/system-connections tmpfs defaults 0 0" >> /etc/fstab.new
 
 # for emulated TPM v1.2 (tcsd)
 # echo "tmpfs /var/lib/tpm tmpfs defaults 0 0" >> /etc/fstab.new
