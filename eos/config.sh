@@ -207,6 +207,7 @@ cp /usr/bin/true /usr/sbin/grub2-mkconfig
 #----------------------------------
 for service in \
     systemd-networkd-persistent-storage.service \
+    systemd-backlight@.service \
     systemd-rfkill.service \
     systemd-rfkill.socket \
     logrotate.service \
