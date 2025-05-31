@@ -244,6 +244,8 @@ for profile in ${kiwi_profiles//,/ }; do
         # RPI required services
         systemctl enable systemd-timesyncd
         systemctl enable update_commit
+        systemctl enable registry-rw
+        systemctl enable registry_resize
     fi
 
     # AB
@@ -251,6 +253,8 @@ for profile in ${kiwi_profiles//,/ }; do
         # AB required services
         systemctl enable systemd-timesyncd
         systemctl enable update_commit
+        systemctl enable registry-rw
+        systemctl enable registry_resize
     fi
 
     # Static
@@ -269,7 +273,9 @@ for profile in ${kiwi_profiles//,/ }; do
             cloud-config \
             cloud-final \
             amazon-ssm-agent \
-            update_commit
+            update_commit \
+            registry-rw \
+            registry_resize
         do
             systemctl enable "${service}"
         done
