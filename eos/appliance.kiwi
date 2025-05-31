@@ -250,11 +250,8 @@
     </packages>
     <packages type="image" profiles="Static">
         <package name="eos-setup-grub-static"/>
-        <!-- add wireless firmware -->
-        <package name="kernel-firmware-iwlwifi"/>
-        <package name="kernel-firmware-mwifiex"/>
-        <package name="kernel-firmware-network"/>
-        <package name="kernel-firmware-atheros"/>
+        <!-- add firmware -->
+        <package name="kernel-firmware-all"/>
     </packages>
     <packages type="image" profiles="AB,Static">
         <package name="eos-setup-base-vm"/>
