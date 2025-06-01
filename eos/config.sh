@@ -85,13 +85,6 @@ mkdir -p /var/lib/containers/storage/kiwi_boxes
 ln -s /var/lib/containers/storage/kiwi_boxes /root/.kiwi_boxes
 
 #======================================
-# Relink var/tmp to RW
-#--------------------------------------
-rm -rf /var/tmp
-mkdir -p /var/lib/containers/storage/tmp
-ln -s /var/lib/containers/storage/tmp /var/tmp
-
-#======================================
 # Move firecracker registry to rw
 #--------------------------------------
 mkdir -p /var/lib/containers/storage/firecracker
