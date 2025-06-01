@@ -85,6 +85,12 @@ mkdir -p /var/lib/containers/storage/kiwi_boxes
 ln -s /var/lib/containers/storage/kiwi_boxes /root/.kiwi_boxes
 
 #======================================
+# Relink var/tmp to RW
+#--------------------------------------
+mkdir -p /var/lib/containers/storage/tmp
+ln -s /var/lib/containers/storage/tmp /var/tmp
+
+#======================================
 # Move firecracker registry to rw
 #--------------------------------------
 mkdir -p /var/lib/containers/storage/firecracker
@@ -268,6 +274,7 @@ for profile in ${kiwi_profiles//,/ }; do
     # Static
     if [ "${profile}" = "Static" ]; then
         # Static required services
+        systemctl enable registry-rw
         systemctl enable systemd-timesyncd
         systemctl enable NetworkManager
     fi
