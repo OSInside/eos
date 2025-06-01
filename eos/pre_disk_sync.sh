@@ -81,8 +81,7 @@ find /usr/lib/rpm -type f ! -path "*rpmrc" ! -path "*macros" -delete
 #======================================
 # Relink var/tmp to RW
 #--------------------------------------
-rm -rf /var/tmp
-mkdir -p /var/lib/containers/storage/tmp
+mv /var/tmp/ /var/lib/containers/storage
 ln -s /var/lib/containers/storage/tmp /var/tmp
 
 #==================================
