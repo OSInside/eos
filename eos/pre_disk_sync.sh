@@ -78,12 +78,6 @@ rm -rf /usr/lib*/librpm*
 rm -rf /usr/lib*/libzypp*
 find /usr/lib/rpm -type f ! -path "*rpmrc" ! -path "*macros" -delete
 
-#======================================
-# Relink var/tmp to RW
-#--------------------------------------
-mv /var/tmp/ /var/lib/containers/storage
-ln -s /var/lib/containers/storage/tmp /var/tmp
-
 #==================================
 # Turn rpm into a noop
 #----------------------------------
