@@ -44,5 +44,12 @@ fi
 # create flakes tmp
 mkdir -p /var/lib/containers/storage/tmp/flakes
 
+# relink /var/tmp from tmpfs to read-write area
+if mountpoint /var/tmp &>/dev/null; then
+    umount /var/tmp
+fi
+mkdir -p /var/lib/containers/storage/var_tmp
+mount --bind /var/lib/containers/storage/var_tmp /var/tmp
+
 # cleanup read-write registry
 rm -f /var/lib/containers/storage/libpod/defaultCNINetExists
