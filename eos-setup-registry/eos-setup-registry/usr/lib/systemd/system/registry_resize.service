@@ -5,6 +5,7 @@ Requires=registry-rw.service
 
 [Service]
 Type=oneshot
+RemainAfterExit=true
 ExecStart=/usr/sbin/registry_resize
 
 [Install]

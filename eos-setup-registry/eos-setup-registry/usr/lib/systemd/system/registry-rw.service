@@ -1,8 +1,10 @@
 [Unit]
 Description=Activate Container Read/Write Registry
+Before=registry_resize.service
 
 [Service]
 Type=oneshot
+RemainAfterExit=true
 ExecStart=/usr/sbin/set_rw_registry
 
 [Install]
