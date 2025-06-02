@@ -48,7 +48,7 @@
             <oemconfig>
                 <oem-resize>false</oem-resize>
             </oemconfig>
-            <size unit="M">2048</size>
+            <size unit="M">4096</size>
         </type>
     </preferences>
     <preferences profiles="Static">
