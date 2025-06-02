@@ -251,7 +251,7 @@ for profile in ${kiwi_profiles//,/ }; do
         systemctl enable systemd-timesyncd
         systemctl enable update_commit
         systemctl enable registry-rw
-        systemctl enable registry_resize
+        # systemctl enable registry_resize
         systemctl enable systemd-networkd
     fi
 
@@ -261,7 +261,7 @@ for profile in ${kiwi_profiles//,/ }; do
         systemctl enable systemd-timesyncd
         systemctl enable update_commit
         systemctl enable registry-rw
-        systemctl enable registry_resize
+        # systemctl enable registry_resize
         systemctl enable systemd-networkd
     fi
 
@@ -269,6 +269,7 @@ for profile in ${kiwi_profiles//,/ }; do
     if [ "${profile}" = "Static" ]; then
         # Static required services
         systemctl enable registry-rw
+        # systemctl enable registry_resize
         systemctl enable systemd-timesyncd
         systemctl enable NetworkManager
     fi

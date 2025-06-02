@@ -10,7 +10,7 @@
         <specification>Immutable Embeddded OS for Container workloads</specification>
     </description>
     <profiles>
-        <profile name="Static" description="Smallest Possible; No A/B update clones"/>
+        <profile name="Static" description="Small; No A/B update clones"/>
         <profile name="AB" description="Rest Capacity, A/B OS updates possible"/>
         <profile name="EC2" description="For AWS EC2, Rest Capacity, A/B OS updates possible"/>
         <profile name="RPI" description="For Raspberry PI, Rest Capacity, A/B OS updates possible" arch="aarch64"/>
@@ -34,7 +34,7 @@
             overlayroot="true"
             overlayroot_write_partition="false"
             bootpartition="false"
-            overlayroot_readonly_partsize="512"
+            overlayroot_readonly_partsize="1024"
             squashfscompression="xz"
             devicepersistency="by-label"
             editbootinstall="registry_encrypted.sh"
@@ -250,12 +250,11 @@
     </packages>
     <packages type="image" profiles="Static">
         <package name="eos-setup-grub-static"/>
-        <!-- add firmware -->
-        <package name="kernel-firmware-all"/>
     </packages>
     <packages type="image" profiles="AB,Static">
         <package name="eos-setup-base-vm"/>
         <package name="eos-setup-base-ssh"/>
+        <package name="kernel-firmware-all"/>
     </packages>
     <packages type="image" profiles="AB,EC2,RPI,RPI5">
         <package name="kexec-tools"/>
