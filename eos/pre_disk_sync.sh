@@ -55,10 +55,10 @@ ln -s initrd-* initrd
 popd
 
 #=======================================
-# Create stub resolv.conf link
+# Create resolv.conf link
 #---------------------------------------
 # kiwi cleanup has dropped stale resolv.conf
-ln -sf /run/systemd/resolve/stub-resolv.conf /etc/resolv.conf
+ln -sf /run/systemd/resolve/resolv.conf /etc/resolv.conf
 
 #=======================================
 # Relink /var/lib/dhcp to /run (rw)
