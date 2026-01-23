@@ -1,6 +1,3 @@
-mapper:
-  - part_mapper: kpartx
-
 container:
   # Specify compression for container images
   # Possible values are true, false, xz or none.

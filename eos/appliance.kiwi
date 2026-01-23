@@ -217,7 +217,6 @@
         <package name="binutils"/>
         <package name="gptfdisk"/>
         <package name="xfsprogs"/>
-        <package name="shadow"/>
         <package name="eos-setup-base"/>
         <package name="eos-setup-registry"/>
         <package name="eos-setup-base-ssh-keys"/>
@@ -275,6 +274,7 @@
         <package name="eos-setup-grub-ec2"/>
     </packages>
     <packages type="bootstrap">
+        <package name="shadow"/>
         <package name="udev"/>
         <package name="dracut"/>
         <package name="filesystem"/>
