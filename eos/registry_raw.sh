@@ -2,7 +2,7 @@
 
 set -ex
 
-for device in /dev/loop*;do
+for device in /dev/loop*p*;do
     partlabel=$(blkid -s PARTLABEL -o value "${device}")
     if [ "${partlabel}" = "p.lxreadonly" ];then
         root_device=$device
