@@ -12,8 +12,8 @@ source /etc/os-release
 # This needs a better solution for rootless use, similar to podman
 mkdir -p /usr/share/flakes
 chmod 777 /usr/share/flakes
-chmod 777 /var/lib/firecracker/images
-chmod 777 /var/lib/firecracker/storage
+chmod 777 /usr/share/firecracker/images
+chmod 777 /usr/share/firecracker/storage
 
 #======================================
 # Custom flake registry for podman cmds
@@ -88,8 +88,8 @@ ln -s /var/lib/containers/storage/kiwi_boxes /root/.kiwi_boxes
 # Move firecracker registry to rw
 #--------------------------------------
 mkdir -p /var/lib/containers/storage/firecracker
-mv /var/lib/firecracker/ /var/lib/containers/storage/firecracker/
-ln -s /var/lib/containers/storage/firecracker /var/lib/firecracker
+mv /usr/share/firecracker/ /var/lib/containers/storage/firecracker/
+ln -s /var/lib/containers/storage/firecracker /usr/share/firecracker
 
 chmod 750 /var/lib/containers
 
@@ -152,7 +152,7 @@ cat >/etc/flakes.yml <<- EOF
 generic:
   flakes_dir: /usr/share/flakes
   podman_ids_dir: /var/lib/containers/storage/tmp/flakes
-  firecracker_ids_dir: /var/lib/firecracker/storage/tmp/flakes
+  firecracker_ids_dir: /usr/share/firecracker/storage/tmp/flakes
 EOF
 
 #======================================
