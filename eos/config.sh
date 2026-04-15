@@ -11,6 +11,8 @@ source /etc/os-release
 #--------------------------------------
 # This needs a better solution for rootless use, similar to podman
 mkdir -p /usr/share/flakes
+mkdir -p /var/lib/firecracker/images
+mkdir -p /var/lib/firecracker/storage
 chmod 777 /usr/share/flakes
 chmod 777 /var/lib/firecracker/images
 chmod 777 /var/lib/firecracker/storage
