@@ -34,7 +34,7 @@
             overlayroot="true"
             overlayroot_write_partition="false"
             bootpartition="false"
-            overlayroot_readonly_partsize="1100"
+            overlayroot_readonly_partsize="1200"
             squashfscompression="xz"
             devicepersistency="by-label"
             editbootinstall="registry_encrypted.sh"
