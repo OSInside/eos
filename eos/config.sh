@@ -98,22 +98,22 @@ chmod 750 /var/lib/containers
 #======================================
 # Import Build Time Containers (RW)
 #--------------------------------------
-for profile in ${kiwi_profiles//,/ }; do
-    if [ ! "${profile}" = "Static" ]; then
-        pushd /usr/share/suse-docker-images/native/
-        for container in *.tar ;do
-            acceptable_name=$(echo "${container}" | cut -f1 -d.)
-            mv "${container}" "${acceptable_name}"
-            skopeo copy \
-                docker-archive:"${acceptable_name}" \
-                oci-archive:"${acceptable_name}":registry.opensuse.org/tw-apps/"${acceptable_name}"
-            podman load -i "${acceptable_name}"
-            rm -f "${acceptable_name}"
-        done
-        popd
-        break
-    fi
-done
+# for profile in ${kiwi_profiles//,/ }; do
+#     if [ ! "${profile}" = "Static" ]; then
+#         pushd /usr/share/suse-docker-images/native/
+#         for container in *.tar ;do
+#             acceptable_name=$(echo "${container}" | cut -f1 -d.)
+#             mv "${container}" "${acceptable_name}"
+#             skopeo copy \
+#                 docker-archive:"${acceptable_name}" \
+#                 oci-archive:"${acceptable_name}":registry.opensuse.org/tw-apps/"${acceptable_name}"
+#             podman load -i "${acceptable_name}"
+#             rm -f "${acceptable_name}"
+#         done
+#         popd
+#         break
+#     fi
+# done
 
 #======================================
 # Setup container policy

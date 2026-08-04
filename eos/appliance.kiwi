@@ -259,8 +259,10 @@
         <package name="kexec-tools"/>
         <package name="eos-setup-os-update"/>
         <!-- preloaded containers -->
+        <!--
         <package name="basesystem-image"/>
         <package name="fleet-image"/>
+        -->
     </packages>
     <packages type="image" profiles="EC2">
         <package name="grub2-x86_64-xen" arch="x86_64"/>
@@ -289,10 +291,12 @@
         <!-- it is in the registry now, so we can delete the package -->
         <!-- <package name="core-image"/> -->
     </packages>
+    <!--
     <packages type="delete" profiles="AB,EC2,RPI,RPI5">
         <package name="basesystem-image"/>
         <package name="fleet-image"/>
     </packages>
+    -->
     <packages type="delete" profiles="AB,Static,RPI,RPI5,EC2">
         <package name="zypper"/>
         <package name="skopeo"/>
