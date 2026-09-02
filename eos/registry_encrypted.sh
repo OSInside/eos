@@ -46,26 +46,26 @@ mount /dev/mapper/luksInstances /mnt/var/lib/containers/storage
 mv /tmp/storage/* /mnt/var/lib/containers/storage/
 
 # register fleet app
-mount -t proc proc /mnt/proc
-chroot /mnt /usr/bin/flake-ctl podman register \
-    --container tw-apps/fleet \
-    --target /usr/bin/fleet \
-    --app /usr/share/flakes/bin/fleet \
-    --base tw-apps/basesystem \
-    --opt '\--rm' \
-    --opt '\-i' \
-    --opt '\--volume /run:/run'
+#mount -t proc proc /mnt/proc
+#chroot /mnt /usr/bin/flake-ctl podman register \
+#    --container tw-apps/fleet \
+#    --target /usr/bin/fleet \
+#    --app /usr/share/flakes/bin/fleet \
+#    --base tw-apps/basesystem \
+#    --opt '\--rm' \
+#    --opt '\-i' \
+#    --opt '\--volume /run:/run'
 
 # register core app
-chroot /mnt /usr/bin/flake-ctl podman register \
-    --container tw-apps/basesystem \
-    --target /usr/lib/systemd/systemd \
-    --app /usr/share/flakes/bin/core \
-    --attach \
-    --opt '\--privileged' \
-    --opt '\--net host' \
-    --opt '\-ti'
-umount /mnt/proc
+#chroot /mnt /usr/bin/flake-ctl podman register \
+#    --container tw-apps/basesystem \
+#    --target /usr/lib/systemd/systemd \
+#    --app /usr/share/flakes/bin/core \
+#    --attach \
+#    --opt '\--privileged' \
+#    --opt '\--net host' \
+#    --opt '\-ti'
+#umount /mnt/proc
 
 # umount storage
 umount /mnt/var/lib/containers/storage
