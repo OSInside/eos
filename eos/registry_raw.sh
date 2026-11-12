@@ -8,6 +8,10 @@ for device in /dev/loop*p*;do
         root_device=$device
         root_partuuid=$(blkid -s PARTUUID -o value "${root_device}")
     fi
+    if [ "${partlabel}" = "p.lxroot" ];then
+        root_device=$device
+        root_partuuid=$(blkid -s PARTUUID -o value "${root_device}")
+    fi
     if [ "${partlabel}" = "p.UEFI" ];then
         esp_device=$device
     fi
