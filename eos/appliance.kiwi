@@ -248,6 +248,7 @@
     </packages>
     <packages type="image" profiles="RPIStandard">
         <package name="dracut-kiwi-oem-repart"/>
+        <package name="rpm-repos-openSUSE-Tumbleweed"/>
     </packages>
     <packages type="image" profiles="RPI,RPIStandard">
         <package name="arm-trusted-firmware-rpi4"/>
