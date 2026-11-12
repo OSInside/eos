@@ -117,7 +117,7 @@
             initrd_system="dracut"
             bootpartition="false"
             devicepersistency="by-label"
-            efipartsize="20"
+            efipartsize="20">
             <bootloader name="grub2"/>
             <oemconfig>
                 <oem-resize>true</oem-resize>
