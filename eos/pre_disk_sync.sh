@@ -6,7 +6,7 @@ set -ex
 # RPI specific
 #---------------------------------------
 for profile in ${kiwi_profiles//,/ }; do
-    if [ "${profile}" = "RPI" ] || [ "${profile}" = "RPI5" ]; then
+    if [ "${profile}" = "RPI" ] || [ "${profile}" = "RPIStandard" ] || [ "${profile}" = "RPI5" ]; then
         #=======================================
         # Setup EFI
         #---------------------------------------
@@ -14,7 +14,7 @@ for profile in ${kiwi_profiles//,/ }; do
         cp -a /boot/vc/* /boot/efi/
         rm -rf /boot/vc
     fi
-    if [ "${profile}" = "RPI" ] || [ "${profile}" = "RPI5" ]; then
+    if [ "${profile}" = "RPI" ] || [ "${profile}" = "RPIStandard" ] || [ "${profile}" = "RPI5" ]; then
         cat >/boot/efi/extraconfig.txt <<- EOF
 			# Enable USB boot
 			program_usb_boot_mode=1
@@ -68,23 +68,27 @@ ln -sf /run/systemd/resolve/resolv.conf /etc/resolv.conf
 #=======================================
 # Delete stuff we don't need
 #---------------------------------------
-rm -rf /usr/lib/sysimage/rpm
-rm -rf /usr/share/locale
-rm -rf /var/log/*
-rm -rf /etc/zypp
-rm -rf /usr/lib/dracut
-rm -rf /usr/lib/zypp
-rm -rf /usr/lib*/librpm*
-rm -rf /usr/lib*/libzypp*
-find /usr/lib/rpm -type f ! -path "*rpmrc" ! -path "*macros" -delete
+for profile in ${kiwi_profiles//,/ }; do
+    if [ ! "${profile}" = "RPIStandard" ];then
+        rm -rf /usr/lib/sysimage/rpm
+        rm -rf /usr/share/locale
+        rm -rf /var/log/*
+        rm -rf /etc/zypp
+        rm -rf /usr/lib/dracut
+        rm -rf /usr/lib/zypp
+        rm -rf /usr/lib*/librpm*
+        rm -rf /usr/lib*/libzypp*
+        find /usr/lib/rpm -type f ! -path "*rpmrc" ! -path "*macros" -delete
 
-#==================================
-# Turn rpm into a noop
-#----------------------------------
-# kiwi calls rpm to fetch metadata from the image, but for size
-# reasons we try to get rid of all rpm data
-cat >/usr/bin/rpm <<- EOF
+        #==================================
+        # Turn rpm into a noop
+        #----------------------------------
+        # kiwi calls rpm to fetch metadata from the image, but for size
+        # reasons we try to get rid of all rpm data
+        cat >/usr/bin/rpm <<- EOF
 #!/bin/sh
 echo "/read-only system, use os-update or container workload"
 EOF
-chmod 755 /usr/bin/rpm
+        chmod 755 /usr/bin/rpm
+    fi
+done
