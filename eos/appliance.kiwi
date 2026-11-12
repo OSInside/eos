@@ -247,7 +247,7 @@
         <!-- <package name="python3-kiwi_boxed_plugin"/> -->
     </packages>
     <packages type="image" profiles="RPIStandard">
-        <package name="dracut-kiwi-oemrepart"/>
+        <package name="dracut-kiwi-oem-repart"/>
     </packages>
     <packages type="image" profiles="RPI,RPIStandard">
         <package name="arm-trusted-firmware-rpi4"/>
