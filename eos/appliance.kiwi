@@ -117,6 +117,7 @@
             initrd_system="dracut"
             bootpartition="false"
             devicepersistency="by-label"
+            editbootinstall="registry_raw.sh"
             efipartsize="20">
             <bootloader name="grub2"/>
             <oemconfig>

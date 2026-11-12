@@ -17,14 +17,18 @@ for device in /dev/loop*p*;do
 done
 
 # umount write space
-umount "${reg_instance_device}"
+if [ -n "${reg_instance_device}" ];then
+    umount "${reg_instance_device}"
+fi
 
 # mount root + ESP
 mount "${root_device}" /mnt
 mount "${esp_device}" /mnt/boot/efi
 
 # mount storage
-mount "${reg_instance_device}" /mnt/var/lib/containers/storage
+if [ -n "${reg_instance_device}" ];then
+    mount "${reg_instance_device}" /mnt/var/lib/containers/storage
+fi
 
 # register fleet app
 #mount -t proc proc /mnt/proc
@@ -49,7 +53,9 @@ mount "${reg_instance_device}" /mnt/var/lib/containers/storage
 #umount /mnt/proc
 
 # umount storage
-umount /mnt/var/lib/containers/storage
+if [ -n "${reg_instance_device}" ];then
+    umount /mnt/var/lib/containers/storage
+fi
 
 # Create grub early boot script
 uuid=$(readlink /mnt/boot/uuid)
