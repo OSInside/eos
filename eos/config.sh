@@ -256,6 +256,12 @@ for profile in ${kiwi_profiles//,/ }; do
         # systemctl enable registry_resize
         systemctl enable systemd-networkd
     fi
+    # RPIStandard
+    if [ "${profile}" = "RPIStandard" ]; then
+        # RPI required services
+        systemctl enable systemd-timesyncd
+        systemctl enable systemd-networkd
+    fi
 
     # AB
     if [ "${profile}" = "AB" ]; then

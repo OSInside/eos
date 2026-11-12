@@ -14,6 +14,7 @@
         <profile name="AB" description="Rest Capacity, A/B OS updates possible"/>
         <profile name="EC2" description="For AWS EC2, Rest Capacity, A/B OS updates possible"/>
         <profile name="RPI" description="For Raspberry PI, Rest Capacity, A/B OS updates possible" arch="aarch64"/>
+        <profile name="RPIStandard" description="For Raspberry PI standard OS" arch="aarch64"/>
         <profile name="RPI5" description="For Raspberry PI5, Rest Capacity, A/B OS updates possible" arch="aarch64"/>
     </profiles>
     <preferences>
@@ -106,6 +107,22 @@
             </partitions>
             <size unit="M">10240</size>
             <machine xen_loader="hvmloader"/>
+        </type>
+    </preferences>
+    <preferences arch="aarch64" profiles="RPIStandard">
+        <type
+            image="oem"
+            filesystem="ext4"
+            firmware="efi"
+            initrd_system="dracut"
+            bootpartition="false"
+            devicepersistency="by-label"
+            efipartsize="20"
+            <bootloader name="grub2"/>
+            <oemconfig>
+                <oem-resize>true</oem-resize>
+            </oemconfig>
+            <size unit="M">2048</size>
         </type>
     </preferences>
     <preferences arch="aarch64" profiles="RPI">
@@ -229,10 +246,13 @@
         <!-- <package name="qemu-ipxe"/> -->
         <!-- <package name="python3-kiwi_boxed_plugin"/> -->
     </packages>
-    <packages type="image" profiles="RPI">
+    <packages type="image" profiles="RPIStandard">
+        <package name="dracut-kiwi-oemrepart"/>
+    </packages>
+    <packages type="image" profiles="RPI,RPIStandard">
         <package name="arm-trusted-firmware-rpi4"/>
     </packages>
-    <packages type="image" profiles="RPI,RPI5">
+    <packages type="image" profiles="RPI,RPI5,RPIStandard">
         <package name="raspberrypi-firmware"/>
         <package name="raspberrypi-firmware-config"/>
         <package name="raspberrypi-firmware-dt"/>
