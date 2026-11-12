@@ -243,13 +243,9 @@ done
 #======================================
 # Setup grub
 #--------------------------------------
-for profile in ${kiwi_profiles//,/ }; do
-    if [ ! "${profile}" = "RPIStandard" ]; then
-        mv "/boot/grub2/grub.cfg.${kiwi_profiles}.${arch}" /boot/grub2/grub.cfg
-        # delete unused grub templates
-        rm -f /boot/grub2/grub.cfg.*
-    fi
-done
+mv "/boot/grub2/grub.cfg.${kiwi_profiles}.${arch}" /boot/grub2/grub.cfg
+# delete unused grub templates
+rm -f /boot/grub2/grub.cfg.*
 
 #======================================
 # Setup Profile Specific
