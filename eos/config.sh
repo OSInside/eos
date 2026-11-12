@@ -204,29 +204,31 @@ rm -f /etc/containers/registries.d/default.yaml
 rm -f /etc/containers/mounts.conf
 rm -f /usr/share/containers/mounts.conf
 
-if [ ! "${profile}" = "RPIStandard" ]; then
-    #==================================
-    # Turn grub-mkconfig into a noop
-    #----------------------------------
-    # We have to provide a static version of the grub config
-    # because at the time of the grub2-mkconfig call the
-    # system is read-only
-    cp /usr/bin/true /usr/sbin/grub2-mkconfig
+for profile in ${kiwi_profiles//,/ }; do
+    if [ ! "${profile}" = "RPIStandard" ]; then
+        #==================================
+        # Turn grub-mkconfig into a noop
+        #----------------------------------
+        # We have to provide a static version of the grub config
+        # because at the time of the grub2-mkconfig call the
+        # system is read-only
+        cp /usr/bin/true /usr/sbin/grub2-mkconfig
 
-    #==================================
-    # Mask services due to RO system
-    #----------------------------------
-    for service in \
-        systemd-networkd-persistent-storage.service \
-        systemd-backlight@.service \
-        systemd-rfkill.service \
-        systemd-rfkill.socket \
-        logrotate.service \
-        logrotate.timer
-    do
-        systemctl mask "${service}"
-    done
-fi
+        #==================================
+        # Mask services due to RO system
+        #----------------------------------
+        for service in \
+            systemd-networkd-persistent-storage.service \
+            systemd-backlight@.service \
+            systemd-rfkill.service \
+            systemd-rfkill.socket \
+            logrotate.service \
+            logrotate.timer
+        do
+            systemctl mask "${service}"
+        done
+    fi
+done
 
 #======================================
 # Setup services
@@ -241,11 +243,13 @@ done
 #======================================
 # Setup grub
 #--------------------------------------
-if [ ! "${profile}" = "RPIStandard" ]; then
-    mv "/boot/grub2/grub.cfg.${kiwi_profiles}.${arch}" /boot/grub2/grub.cfg
-    # delete unused grub templates
-    rm -f /boot/grub2/grub.cfg.*
-fi
+for profile in ${kiwi_profiles//,/ }; do
+    if [ ! "${profile}" = "RPIStandard" ]; then
+        mv "/boot/grub2/grub.cfg.${kiwi_profiles}.${arch}" /boot/grub2/grub.cfg
+        # delete unused grub templates
+        rm -f /boot/grub2/grub.cfg.*
+    fi
+done
 
 #======================================
 # Setup Profile Specific
