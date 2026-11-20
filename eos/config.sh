@@ -204,16 +204,17 @@ rm -f /etc/containers/registries.d/default.yaml
 rm -f /etc/containers/mounts.conf
 rm -f /usr/share/containers/mounts.conf
 
+#==================================
+# Turn grub-mkconfig into a noop
+#----------------------------------
+# We have to provide a static version of the grub config
+# because at the time of the grub2-mkconfig call the
+# system is read-only
+cp /usr/sbin/grub2-mkconfig /usr/sbin/grub2-mkconfig.orig
+cp /usr/bin/true /usr/sbin/grub2-mkconfig
+
 for profile in ${kiwi_profiles//,/ }; do
     if [ ! "${profile}" = "RPIStandard" ]; then
-        #==================================
-        # Turn grub-mkconfig into a noop
-        #----------------------------------
-        # We have to provide a static version of the grub config
-        # because at the time of the grub2-mkconfig call the
-        # system is read-only
-        cp /usr/bin/true /usr/sbin/grub2-mkconfig
-
         #==================================
         # Mask services due to RO system
         #----------------------------------
