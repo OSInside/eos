@@ -88,7 +88,7 @@ grub2-mkimage \
     gfxterm gzio halt iso9660 jpeg linux loadenv loopback minicmd \
     normal part_gpt part_msdos password password_pbkdf2 png \
     reboot search search_fs_file search_fs_uuid search_label \
-    serial squash4 video test true sleep echo
+    serial squash4 ext2 video test true sleep echo
 
 # Delete unneded metadata
 rm -f /mnt/boot/efi/EFI/BOOT/earlyboot.cfg
